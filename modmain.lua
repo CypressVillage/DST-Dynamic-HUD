@@ -10,11 +10,13 @@ SUPPORTED_HUD_MODS = {
 
 ENABLED_HUD_MODS = {}
 CURREENT_HUD_MOD = "workshop-2226345952"
+BUILD_OVERRIDE = {}
 
 for _, mod_id in ipairs(SUPPORTED_HUD_MODS) do
     if KnownModIndex:IsModEnabled(mod_id) then
         table.insert(ENABLED_HUD_MODS, mod_id)
         modimport('assets/' .. mod_id .. '.lua')
+        modimport('buildoverride/' .. mod_id .. '.lua')
     end
 end
 
@@ -26,7 +28,7 @@ end
 function ProcessAtlasPath(atlas, replacement)
     -- 处理包含../mods/workshop-前缀的情况
     if atlas:find("mods/workshop") then
-        print(111)
+        -- print(111)
         return atlas:gsub("workshop%-%d+", replacement, 1)
     -- 处理不包含workshop-且不包含../的情况
     elseif not atlas:find("workshop%-") and not atlas:find("%.%.%/") then
@@ -37,14 +39,10 @@ function ProcessAtlasPath(atlas, replacement)
 end
 
 local Image = require("widgets/image")
-local _SetTexture = Image.SetTexture
+local _SetTexture = Image.SetTexture -- 这个必须在其他mod执行后执行？
 Image.SetTexture = function(self, atlas, tex, ...)
-    print("HUDDDDDDDDDDDDDDDDDDDD")
     atlas_ = ProcessAtlasPath(atlas, CURREENT_HUD_MOD)
     atlas_ = GLOBAL.softresolvefilepath(atlas_)
-    print("atlas:", atlas)
-    print("atlas_:", atlas_)
-    print("tex:", tex)
     atlas = atlas_ or atlas
     return _SetTexture(self, atlas, tex, ...)
 end
@@ -53,7 +51,7 @@ local function reloadAllTexture(widget)
     if widget == nil then
         return
     end
-
+    
     if widget.atlas and widget.texture then
         if widget.SetTexture then
             widget:SetTexture(widget.atlas, widget.texture)
@@ -67,28 +65,122 @@ local function reloadAllTexture(widget)
     end
 end
 
+local function processBuildOverride(buildname)
+    if buildname:find("workshop") then
+        buildname = buildname:gsub("workshop%-%d+_", "", 1)
+    end
+    if CURREENT_HUD_MOD and BUILD_OVERRIDE[CURREENT_HUD_MOD] then
+        local build_override = BUILD_OVERRIDE[CURREENT_HUD_MOD][buildname]
+        if build_override then
+            return build_override
+        end
+    end
+    return buildname
+end
 
+local _SetBuild = GLOBAL.AnimState.SetBuild
+GLOBAL.AnimState.SetBuild = function(self, buildname, ...)
+    if buildname then
+        local newbuild = processBuildOverride(buildname)
+        if newbuild ~= buildname then
+            return _SetBuild(self, newbuild, ...)
+        end
+    end
+    return _SetBuild(self, buildname, ...)
+end
+
+local _OverrideSymbol = GLOBAL.AnimState.OverrideSymbol
+GLOBAL.AnimState.OverrideSymbol = function(self, symbol, buildname, ...)
+    if buildname then
+        local newbuild = processBuildOverride(buildname)
+        if newbuild ~= buildname then
+            return _OverrideSymbol(self, symbol, newbuild, ...)
+        end
+    end
+    return _OverrideSymbol(self, symbol, buildname, ...)
+end
+
+local function updateBuild(inst)
+    if inst and inst.GetAnimState then
+        local buildname = inst:GetAnimState():GetBuild()
+        if buildname then
+            local newbuild = processBuildOverride(buildname)
+            if newbuild ~= buildname then
+                inst:GetAnimState():SetBuild(newbuild)
+            end
+        end
+    end
+end
 
 local function applyHUD(mod_id)
-    local pt_cftmenu = GLOBAL.ThePlayer.HUD.controls.craftingmenu:GetPosition()
-    GLOBAL.ThePlayer.HUD.controls.craftingmenu:MoveTo(pt_cftmenu, GLOBAL.Vector3(-800, 0, pt_cftmenu.z), 0.3)
-    local pt_inv = GLOBAL.ThePlayer.HUD.controls.inv:GetPosition()
-    GLOBAL.ThePlayer.HUD.controls.inv:MoveTo(pt_cftmenu, GLOBAL.Vector3(0, -200, pt_cftmenu.z), 0.3)
+    local controls = GLOBAL.ThePlayer.HUD.controls
+
+    local pt_cftmenu = controls.craftingmenu:GetPosition()
+    controls.craftingmenu:MoveTo(pt_cftmenu, GLOBAL.Vector3(-800, 0, pt_cftmenu.z), 0.3)
+
+    local pt_inv = controls.inv:GetPosition()
+    controls.inv:MoveTo(pt_inv, GLOBAL.Vector3(0, -200, pt_inv.z), 0.3)
+
+    local pt_mapcontrols = controls.mapcontrols:GetPosition()
+    controls.mapcontrols:MoveTo(pt_mapcontrols, GLOBAL.Vector3(200, 0, pt_mapcontrols.z), 0.3)
+
+    local pt_containerroot_side = controls.containerroot_side:GetPosition()
+    controls.containerroot_side:MoveTo(pt_containerroot_side, GLOBAL.Vector3(250, 0, pt_containerroot_side.z), 0.3)
+    
+    local pt_topright_root = controls.topright_root:GetPosition()
+    controls.topright_root:MoveTo(pt_topright_root, GLOBAL.Vector3(200, 0, pt_topright_root.z), 0.3)
+
 
     GLOBAL.ThePlayer:DoTaskInTime(0.3, function()
         CURREENT_HUD_MOD = mod_id
         -- reloadAllTexture(GLOBAL.ThePlayer.HUD) -- 性能较差，可能导致卡顿
-        reloadAllTexture(GLOBAL.ThePlayer.HUD.controls.craftingmenu)
-        reloadAllTexture(GLOBAL.ThePlayer.HUD.controls.inv)
-        reloadAllTexture(GLOBAL.ThePlayer.HUD.controls.clock)
-        -- reloadAllTexture(GLOBAL.ThePlayer.HUD.controls.status)
+        reloadAllTexture(controls.craftingmenu)        -- 制作栏
+        reloadAllTexture(controls.inv)                 -- 物品栏
+        reloadAllTexture(controls.mapcontrols)         -- 右下地图
+        reloadAllTexture(controls.containerroot_side)  -- 右侧背包
+        -- reloadAllTexture(controls.clock)
+        reloadAllTexture(controls.topright_root)
+        -- reloadAllTexture(controls.status)
+
+        updateBuild(controls.clock._rim)
+        updateBuild(controls.clock._anim)
+        updateBuild(controls.clock._moonanim)
+        -- updateBuild(controls.status.resurrectbuttonfx)
+        -- updateBuild(controls.status.circleframe)
+        -- updateBuild(controls.status.brain.anim)
+        -- updateBuild(controls.status.brain.backing)
+        -- updateBuild(controls.status.brain.circular_meter)
+        -- updateBuild(controls.status.brain.circleframe) -- 图标
+        -- updateBuild(controls.status.brain.anim_bonus)
+
+        -- updateBuild(controls.status.brain.topperanim)
+        -- updateBuild(controls.status.brain.circleframe)
+        updateBuild(controls.status.stomach.circleframe) -- 饱食度边框
+        updateBuild(controls.status.heart.circleframe2) -- 血量边框
+        controls.status.brain.circleframe2:GetAnimState():ClearOverrideSymbol("frame_circle")
+        controls.status.brain.circleframe2:GetAnimState():OverrideSymbol("frame_circle", "status_meter", "frame_circle") -- 理智边框
+
+        for _, container in pairs(controls.containers) do
+            updateBuild(container.bganim)
+        end
     end)
     
     GLOBAL.ThePlayer:DoTaskInTime(0.5, function()
-        local pt = GLOBAL.ThePlayer.HUD.controls.craftingmenu:GetPosition()
-        GLOBAL.ThePlayer.HUD.controls.craftingmenu:MoveTo(pt, pt_cftmenu, 0.5)
-        local pt = GLOBAL.ThePlayer.HUD.controls.inv:GetPosition()
-        GLOBAL.ThePlayer.HUD.controls.inv:MoveTo(pt, pt_inv, 0.5)
+        local pt = controls.craftingmenu:GetPosition()
+        controls.craftingmenu:MoveTo(pt, pt_cftmenu, 0.5)
+
+        local pt = controls.inv:GetPosition()
+        controls.inv:MoveTo(pt, pt_inv, 0.5)
+
+        local pt = controls.mapcontrols:GetPosition()
+        controls.mapcontrols:MoveTo(pt, pt_mapcontrols, 0.5)
+
+        local pt = controls.containerroot_side:GetPosition()
+        controls.containerroot_side:MoveTo(pt, pt_containerroot_side, 0.5)
+        
+        local pt = controls.topright_root:GetPosition()
+        controls.topright_root:MoveTo(pt, pt_topright_root, 0.5)
+
     end)
 end
 
