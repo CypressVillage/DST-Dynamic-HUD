@@ -6,6 +6,7 @@ Assets = {}
 SUPPORTED_HUD_MODS = {
     "workshop-2250176974", -- Roseate HUD
     "workshop-2226345952", -- Nautical HUD
+    "workshop-1583765151", -- Victorian HUD
 }
 
 ENABLED_HUD_MODS = {}
