@@ -129,7 +129,7 @@ local function applyHUD(mod_id)
     controls.containerroot_side:MoveTo(pt_containerroot_side, GLOBAL.Vector3(250, 0, pt_containerroot_side.z), 0.3)
     
     local pt_topright_root = controls.topright_root:GetPosition()
-    controls.topright_root:MoveTo(pt_topright_root, GLOBAL.Vector3(200, 0, pt_topright_root.z), 0.3)
+    controls.topright_root:MoveTo(pt_topright_root, GLOBAL.Vector3(300, 0, pt_topright_root.z), 0.3)
 
 
     GLOBAL.ThePlayer:DoTaskInTime(0.3, function()
@@ -190,7 +190,7 @@ local function OnKeyPressed(key)
         if hud then
             applyHUD("workshop-2250176974")
         else
-            applyHUD("workshop-2226345952")
+            applyHUD("workshop-1583765151")
         end
 		hud = not hud
 	end
@@ -221,14 +221,14 @@ HUD_EVENTS_PRIORITY = {
     EVENT_NIGHTMIRE = 1,
 }
 
-HUD_PRIORITY = {}
+EVENT_PRIORITY = {}
 for event_type, _ in pairs(HUD_EVENTS_PRIORITY) do
     if type(HUD_EVENTS_PRIORITY[event_type]) == "table" then
         for sub_event_type, priority in pairs(HUD_EVENTS_PRIORITY[event_type]) do
-            HUD_PRIORITY[sub_event_type] = 0
+            EVENT_PRIORITY[sub_event_type] = 0
         end
     else
-        HUD_PRIORITY[event_type] = 0
+        EVENT_PRIORITY[event_type] = 0
     end
 end
 
@@ -241,7 +241,7 @@ local function OnHUDEvent()
     -- find max priority
     local event
     local max_priority = 0
-    for event_type, priority in pairs(HUD_PRIORITY) do
+    for event_type, priority in pairs(EVENT_PRIORITY) do
         if priority > max_priority then
             max_priority = priority
             event = event_type
@@ -260,25 +260,38 @@ local function OnHUDEvent()
     end
 end
 
+local function updateEventPrioriity(event_type, event)
+    if event_type == "AREA_CHANGE" then
+        for area_event, priority in pairs(HUD_EVENTS_PRIORITY.AREA_CHANGE) do
+            if area_event == event then
+                EVENT_PRIORITY[area_event] = priority
+            else
+                EVENT_PRIORITY[area_event] = 0
+            end
+        end
+    elseif event_type == "TIME_CHANGE" then
+        for time_event, priority in pairs(HUD_EVENTS_PRIORITY.TIME_CHANGE) do
+            if time_event == event then
+                EVENT_PRIORITY[time_event] = priority
+            else
+                EVENT_PRIORITY[time_event] = 0
+            end
+        end
+    else
+        EVENT_PRIORITY[event] = HUD_EVENTS_PRIORITY[event] or 0
+    end
+end
+
+local function updateHUDbyEvent(event_type, event)
+    updateEventPrioriity(event_type, event)
+    OnHUDEvent()
+end
+
 AddPlayerPostInit(function(inst)
     inst:ListenForEvent("got_on_platform", function()
-        for area_event, priority in pairs(HUD_EVENTS_PRIORITY.AREA_CHANGE) do
-            if area_event == "ON_BOAT" then
-                HUD_PRIORITY[area_event] = priority
-            else
-                HUD_PRIORITY[area_event] = 0
-            end
-        end
-        OnHUDEvent()
+        updateHUDbyEvent("AREA_CHANGE", "ON_BOAT")
     end)
     inst:ListenForEvent("got_off_platform", function()
-        for area_event, priority in pairs(HUD_EVENTS_PRIORITY.AREA_CHANGE) do
-            if area_event == "ON_DEFAULT_AREA" then
-                HUD_PRIORITY[area_event] = priority
-            else
-                HUD_PRIORITY[area_event] = 0
-            end
-        end
-        OnHUDEvent()
+        updateHUDbyEvent("AREA_CHANGE", "ON_DEFAULT_AREA")
     end)
 end)
