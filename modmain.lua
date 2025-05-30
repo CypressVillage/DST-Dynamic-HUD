@@ -10,7 +10,7 @@ SUPPORTED_HUD_MODS = {
 }
 
 ENABLED_HUD_MODS = {}
-CURREENT_HUD_MOD = "workshop-2226345952"
+CURRENT_HUD_MOD = "workshop-2226345952"
 BUILD_OVERRIDE = {}
 
 for _, mod_id in ipairs(SUPPORTED_HUD_MODS) do
@@ -42,7 +42,7 @@ end
 local Image = require("widgets/image")
 local _SetTexture = Image.SetTexture -- 这个必须在其他mod执行后执行？
 Image.SetTexture = function(self, atlas, tex, ...)
-    atlas_ = ProcessAtlasPath(atlas, CURREENT_HUD_MOD)
+    atlas_ = ProcessAtlasPath(atlas, CURRENT_HUD_MOD)
     atlas_ = GLOBAL.softresolvefilepath(atlas_)
     atlas = atlas_ or atlas
     return _SetTexture(self, atlas, tex, ...)
@@ -70,8 +70,8 @@ local function processBuildOverride(buildname)
     if buildname:find("workshop") then
         buildname = buildname:gsub("workshop%-%d+_", "", 1)
     end
-    if CURREENT_HUD_MOD and BUILD_OVERRIDE[CURREENT_HUD_MOD] then
-        local build_override = BUILD_OVERRIDE[CURREENT_HUD_MOD][buildname]
+    if CURRENT_HUD_MOD and BUILD_OVERRIDE[CURRENT_HUD_MOD] then
+        local build_override = BUILD_OVERRIDE[CURRENT_HUD_MOD][buildname]
         if build_override then
             return build_override
         end
@@ -133,7 +133,7 @@ local function applyHUD(mod_id)
 
 
     GLOBAL.ThePlayer:DoTaskInTime(0.3, function()
-        CURREENT_HUD_MOD = mod_id
+        CURRENT_HUD_MOD = mod_id
         -- reloadAllTexture(GLOBAL.ThePlayer.HUD) -- 性能较差，可能导致卡顿
         reloadAllTexture(controls.craftingmenu)        -- 制作栏
         reloadAllTexture(controls.inv)                 -- 物品栏
@@ -260,7 +260,7 @@ local function OnHUDEvent()
     end
 end
 
-local function updateEventPrioriity(event_type, event)
+local function updateEventPriority(event_type, event)
     if event_type == "AREA_CHANGE" then
         for area_event, priority in pairs(HUD_EVENTS_PRIORITY.AREA_CHANGE) do
             if area_event == event then
@@ -283,7 +283,7 @@ local function updateEventPrioriity(event_type, event)
 end
 
 local function updateHUDbyEvent(event_type, event)
-    updateEventPrioriity(event_type, event)
+    updateEventPriority(event_type, event)
     OnHUDEvent()
 end
 
