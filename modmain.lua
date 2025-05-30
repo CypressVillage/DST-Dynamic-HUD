@@ -206,3 +206,79 @@ local function ControlsPostConstruct(inst)
 	inst.handler = GLOBAL.TheInput:AddKeyHandler(function(key, down) OnRawKey(key, down) end )
 end
 AddClassPostConstruct("widgets/controls", ControlsPostConstruct)
+
+HUD_EVENTS_PRIORITY = {
+    AREA_CHANGE = {
+        ON_DEFAULT_AREA = 1,
+        ON_BOAT = 6,
+    },
+    TIME_CHANGE = {
+        DAY = 5,
+        NIGHT = 4,
+        DUSK = 3,
+        DAWN = 2,
+    },
+    EVENT_NIGHTMIRE = 1,
+}
+
+HUD_PRIORITY = {}
+for event_type, _ in pairs(HUD_EVENTS_PRIORITY) do
+    if type(HUD_EVENTS_PRIORITY[event_type]) == "table" then
+        for sub_event_type, priority in pairs(HUD_EVENTS_PRIORITY[event_type]) do
+            HUD_PRIORITY[sub_event_type] = 0
+        end
+    else
+        HUD_PRIORITY[event_type] = 0
+    end
+end
+
+HUD_ = {
+    ON_DEFAULT_AREA = "workshop-1583765151", -- Victorian HUD
+    ON_BOAT = "workshop-2226345952", -- Nautical HUD
+}
+
+local function OnHUDEvent()
+    -- find max priority
+    local event
+    local max_priority = 0
+    for event_type, priority in pairs(HUD_PRIORITY) do
+        if priority > max_priority then
+            max_priority = priority
+            event = event_type
+        end
+    end
+    -- apply HUD based on event
+    if event then
+        local mod_id = HUD_[event]
+        if mod_id then
+            applyHUD(mod_id)
+        else
+            print("[HUD]: No HUD mod found for event: " .. event)
+        end
+    else
+        print("[HUD]: No active HUD events found.")
+    end
+end
+
+AddPlayerPostInit(function(inst)
+    inst:ListenForEvent("got_on_platform", function()
+        for area_event, priority in pairs(HUD_EVENTS_PRIORITY.AREA_CHANGE) do
+            if area_event == "ON_BOAT" then
+                HUD_PRIORITY[area_event] = priority
+            else
+                HUD_PRIORITY[area_event] = 0
+            end
+        end
+        OnHUDEvent()
+    end)
+    inst:ListenForEvent("got_off_platform", function()
+        for area_event, priority in pairs(HUD_EVENTS_PRIORITY.AREA_CHANGE) do
+            if area_event == "ON_DEFAULT_AREA" then
+                HUD_PRIORITY[area_event] = priority
+            else
+                HUD_PRIORITY[area_event] = 0
+            end
+        end
+        OnHUDEvent()
+    end)
+end)
