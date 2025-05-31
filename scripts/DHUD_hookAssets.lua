@@ -17,6 +17,9 @@ end
 local Image = require("widgets/image")
 local _SetTexture = Image.SetTexture -- 这个必须在其他mod执行后执行？
 Image.SetTexture = function(self, atlas, tex, ...)
+    if atlas:find("modicon.xml") then
+        return _SetTexture(self, atlas, tex, ...)
+    end
     atlas_ = ProcessAtlasPath(atlas, CURRENT_HUD_MOD)
     atlas_ = GLOBAL.softresolvefilepath(atlas_)
     atlas = atlas_ or atlas
