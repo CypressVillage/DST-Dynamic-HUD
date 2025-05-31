@@ -85,7 +85,7 @@ local function updateBuild(inst)
     end
 end
 
-CURRENT_HUD_MOD = "workshop-2226345952"
+CURRENT_HUD_MOD = GetModConfigData("HUD_ON_DEFAULT_AREA")
 function applyHUD(mod_id)
     local controls = GLOBAL.ThePlayer.HUD.controls
 

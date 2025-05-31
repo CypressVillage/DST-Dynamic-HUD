@@ -1,16 +1,15 @@
 
 HUD_EVENTS_PRIORITY = {
     AREA_CHANGE = {
-        ON_DEFAULT_AREA = 1,
-        ON_BOAT = 6,
+        ON_DEFAULT_AREA = GetModConfigData("P_ON_DEFAULT_AREA"),
+        ON_BOAT = GetModConfigData("P_ON_BOAT"),
     },
-    TIME_CHANGE = {
-        DAY = 5,
-        NIGHT = 4,
-        DUSK = 3,
-        DAWN = 2,
-    },
-    EVENT_NIGHTMIRE = 1,
+    -- TIME_CHANGE = {
+    --     DAY = 5,
+    --     NIGHT = 4,
+    --     DUSK = 3,
+    -- },
+    -- EVENT_NIGHTMIRE = 1,
 }
 
 EVENT_PRIORITY = {}
@@ -25,8 +24,8 @@ for event_type, _ in pairs(HUD_EVENTS_PRIORITY) do
 end
 
 HUD_ = {
-    ON_DEFAULT_AREA = "workshop-1583765151", -- Victorian HUD
-    ON_BOAT = "workshop-2226345952", -- Nautical HUD
+    ON_DEFAULT_AREA = GetModConfigData("HUD_ON_DEFAULT_AREA"),
+    ON_BOAT = GetModConfigData("HUD_ON_BOAT"),
 }
 
 local function OnHUDEvent()
