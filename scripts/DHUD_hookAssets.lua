@@ -128,27 +128,20 @@ function applyHUD(mod_id)
         reloadAllTexture(controls.inv)                 -- 物品栏
         reloadAllTexture(controls.mapcontrols)         -- 右下地图
         reloadAllTexture(controls.containerroot_side)  -- 右侧背包
-        -- reloadAllTexture(controls.clock)
-        reloadAllTexture(controls.topright_root)
-        -- reloadAllTexture(controls.status)
+        reloadAllTexture(controls.topright_root)       -- 右上角
 
         updateBuild(controls.clock._rim)
         updateBuild(controls.clock._anim)
         updateBuild(controls.clock._moonanim)
-        -- updateBuild(controls.status.resurrectbuttonfx)
-        -- updateBuild(controls.status.circleframe)
-        -- updateBuild(controls.status.brain.anim)
-        -- updateBuild(controls.status.brain.backing)
-        -- updateBuild(controls.status.brain.circular_meter)
-        -- updateBuild(controls.status.brain.circleframe) -- 图标
-        -- updateBuild(controls.status.brain.anim_bonus)
 
-        -- updateBuild(controls.status.brain.topperanim)
-        -- updateBuild(controls.status.brain.circleframe)
+        updateBuild(controls.status.stomach.backing)
+        updateBuild(controls.status.heart.backing)
+        updateBuild(controls.status.brain.backing)
+
         updateBuild(controls.status.stomach.circleframe) -- 饱食度边框
         updateBuild(controls.status.heart.circleframe2) -- 血量边框
-        controls.status.brain.circleframe2:GetAnimState():ClearOverrideSymbol("frame_circle")
         controls.status.brain.circleframe2:GetAnimState():OverrideSymbol("frame_circle", "status_meter", "frame_circle") -- 理智边框
+        controls.status.boatmeter.anim:GetAnimState():OverrideSymbol("frame_circle", "status_meter", "frame_circle") -- 船只耐久边框
 
         for _, container in pairs(controls.containers) do
             updateBuild(container.bganim)
