@@ -142,11 +142,14 @@ function applyHUD(mod_id)
         updateBuild(controls.status.stomach.backing)
         updateBuild(controls.status.heart.backing)
         updateBuild(controls.status.brain.backing)
+        updateBuild(controls.status.boatmeter.backing)
+        updateBuild(controls.status.moisturemeter.backing)
         
         updateBuild(controls.status.stomach.circleframe) -- 饱食度边框
         updateBuild(controls.status.heart.circleframe2) -- 血量边框
         controls.status.brain.circleframe2:GetAnimState():OverrideSymbol("frame_circle", "status_meter", "frame_circle") -- 理智边框
         controls.status.boatmeter.anim:GetAnimState():OverrideSymbol("frame_circle", "status_meter", "frame_circle") -- 船只耐久边框
+        updateBuild(controls.status.moisturemeter.circleframe) -- 潮湿度边框
 
         for _, container in pairs(controls.containers) do
             updateBuild(container.bganim)
