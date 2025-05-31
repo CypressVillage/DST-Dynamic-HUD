@@ -1,4 +1,7 @@
 local function OnKeyPressed(key)
+    if not GetModConfigData("ENABLE_TOGGLE_KEY") then
+        return
+    end
     if key == 104 then
         -- 循环切换HUD
         local current_index = 1

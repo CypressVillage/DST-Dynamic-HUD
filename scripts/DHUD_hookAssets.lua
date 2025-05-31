@@ -109,21 +109,23 @@ function applyHUD(mod_id)
     end
     local controls = GLOBAL.ThePlayer.HUD.controls
 
-    local pt_topright_root = controls.topright_root:GetPosition()
-    controls.topright_root:MoveTo(pt_topright_root, GLOBAL.Vector3(300, 0, pt_topright_root.z), 0.3)
+    if GetModConfigData("ENABLE_FLUENT_ANIM") then
+        pt_topright_root = controls.topright_root:GetPosition()
+        controls.topright_root:MoveTo(pt_topright_root, GLOBAL.Vector3(300, 0, pt_topright_root.z), 0.3)
+        
+        pt_containerroot_side = controls.containerroot_side:GetPosition()
+        controls.containerroot_side:MoveTo(pt_containerroot_side, GLOBAL.Vector3(300, 0, pt_containerroot_side.z), 0.3)
+        
+        pt_bottomright_root = controls.bottomright_root:GetPosition()
+        controls.bottomright_root:MoveTo(pt_bottomright_root, GLOBAL.Vector3(300, 0, pt_bottomright_root.z), 0.3)
+        
+        pt_bottom_root = controls.bottom_root:GetPosition()
+        controls.bottom_root:MoveTo(pt_bottom_root, GLOBAL.Vector3(0, -200, pt_bottom_root.z), 0.3)
+        
+        pt_left_root = controls.left_root:GetPosition()
+        controls.left_root:MoveTo(pt_left_root, GLOBAL.Vector3(-800, 0, pt_left_root.z), 0.3)
+    end
     
-    local pt_containerroot_side = controls.containerroot_side:GetPosition()
-    controls.containerroot_side:MoveTo(pt_containerroot_side, GLOBAL.Vector3(300, 0, pt_containerroot_side.z), 0.3)
-
-    local pt_bottomright_root = controls.bottomright_root:GetPosition()
-    controls.bottomright_root:MoveTo(pt_bottomright_root, GLOBAL.Vector3(300, 0, pt_bottomright_root.z), 0.3)
-    
-    local pt_bottom_root = controls.bottom_root:GetPosition()
-    controls.bottom_root:MoveTo(pt_bottom_root, GLOBAL.Vector3(0, -200, pt_bottom_root.z), 0.3)
-
-    local pt_left_root = controls.left_root:GetPosition()
-    controls.left_root:MoveTo(pt_left_root, GLOBAL.Vector3(-800, 0, pt_left_root.z), 0.3)
-
     GLOBAL.ThePlayer:DoTaskInTime(0.3, function()
         CURRENT_HUD_MOD = mod_id
         -- reloadAllTexture(GLOBAL.ThePlayer.HUD) -- 性能较差，可能导致卡顿
@@ -132,15 +134,15 @@ function applyHUD(mod_id)
         reloadAllTexture(controls.mapcontrols)         -- 右下地图
         reloadAllTexture(controls.containerroot_side)  -- 右侧背包
         reloadAllTexture(controls.topright_root)       -- 右上角
-
+        
         updateBuild(controls.clock._rim)
         updateBuild(controls.clock._anim)
         updateBuild(controls.clock._moonanim)
-
+        
         updateBuild(controls.status.stomach.backing)
         updateBuild(controls.status.heart.backing)
         updateBuild(controls.status.brain.backing)
-
+        
         updateBuild(controls.status.stomach.circleframe) -- 饱食度边框
         updateBuild(controls.status.heart.circleframe2) -- 血量边框
         controls.status.brain.circleframe2:GetAnimState():OverrideSymbol("frame_circle", "status_meter", "frame_circle") -- 理智边框
@@ -150,21 +152,23 @@ function applyHUD(mod_id)
             updateBuild(container.bganim)
         end
     end)
-
-    GLOBAL.ThePlayer:DoTaskInTime(0.5, function()
-        local pt = controls.topright_root:GetPosition()
-        controls.topright_root:MoveTo(pt, pt_topright_root, 0.5)
-
-        local pt = controls.containerroot_side:GetPosition()
-        controls.containerroot_side:MoveTo(pt, pt_containerroot_side, 0.5)
-
-        local pt = controls.bottomright_root:GetPosition()
-        controls.bottomright_root:MoveTo(pt, pt_bottomright_root, 0.5)
-
-        local pt = controls.bottom_root:GetPosition()
-        controls.bottom_root:MoveTo(pt, pt_bottom_root, 0.5)
-
-        local pt = controls.left_root:GetPosition()
-        controls.left_root:MoveTo(pt, pt_left_root, 0.5)
-    end)
+    
+    if GetModConfigData("ENABLE_FLUENT_ANIM") then
+        GLOBAL.ThePlayer:DoTaskInTime(0.5, function()
+            local pt = controls.topright_root:GetPosition()
+            controls.topright_root:MoveTo(pt, pt_topright_root, 0.5)
+            
+            local pt = controls.containerroot_side:GetPosition()
+            controls.containerroot_side:MoveTo(pt, pt_containerroot_side, 0.5)
+            
+            local pt = controls.bottomright_root:GetPosition()
+            controls.bottomright_root:MoveTo(pt, pt_bottomright_root, 0.5)
+            
+            local pt = controls.bottom_root:GetPosition()
+            controls.bottom_root:MoveTo(pt, pt_bottom_root, 0.5)
+            
+            local pt = controls.left_root:GetPosition()
+            controls.left_root:MoveTo(pt, pt_left_root, 0.5)
+        end)
+    end
 end

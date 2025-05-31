@@ -64,6 +64,28 @@ local hud_table = {
 }
 
 configuration_options = {
+    title("【功能设置】"),
+    {
+        name = "ENABLE_FLUENT_ANIM",
+        label = "HUD切换时过渡动画",
+        hover = "启用后，HUD切换时会有过渡动画",
+        options = {
+            {description = "启用", data = true},
+            {description = "禁用", data = false},
+        },
+        default = true,
+    },
+    {
+        name = "ENABLE_TOGGLE_KEY",
+        label = "启用HUD切换热键",
+        hover = "启用后，可以通过热键切换HUD",
+        options = {
+            {description = "启用", data = true},
+            {description = "禁用", data = false},
+        },
+        default = true,
+    },
+    emptyline,
     title("【HUD偏好设置】"),
     title("不同地形HUD"),
     {
