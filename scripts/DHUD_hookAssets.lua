@@ -138,6 +138,10 @@ function applyHUD(mod_id)
         updateBuild(controls.clock._rim)
         updateBuild(controls.clock._anim)
         updateBuild(controls.clock._moonanim)
+        if controls.seasonclock then
+            updateBuild(controls.seasonclock._rim)
+            updateBuild(controls.seasonclock._anim)
+        end
         
         updateBuild(controls.status.stomach.backing)
         updateBuild(controls.status.heart.backing)
