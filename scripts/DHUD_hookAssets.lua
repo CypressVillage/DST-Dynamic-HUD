@@ -89,21 +89,20 @@ CURRENT_HUD_MOD = "workshop-2226345952"
 function applyHUD(mod_id)
     local controls = GLOBAL.ThePlayer.HUD.controls
 
-    local pt_cftmenu = controls.craftingmenu:GetPosition()
-    controls.craftingmenu:MoveTo(pt_cftmenu, GLOBAL.Vector3(-800, 0, pt_cftmenu.z), 0.3)
-
-    local pt_inv = controls.inv:GetPosition()
-    controls.inv:MoveTo(pt_inv, GLOBAL.Vector3(0, -200, pt_inv.z), 0.3)
-
-    local pt_mapcontrols = controls.mapcontrols:GetPosition()
-    controls.mapcontrols:MoveTo(pt_mapcontrols, GLOBAL.Vector3(200, 0, pt_mapcontrols.z), 0.3)
-
-    local pt_containerroot_side = controls.containerroot_side:GetPosition()
-    controls.containerroot_side:MoveTo(pt_containerroot_side, GLOBAL.Vector3(250, 0, pt_containerroot_side.z), 0.3)
-    
     local pt_topright_root = controls.topright_root:GetPosition()
     controls.topright_root:MoveTo(pt_topright_root, GLOBAL.Vector3(300, 0, pt_topright_root.z), 0.3)
+    
+    local pt_containerroot_side = controls.containerroot_side:GetPosition()
+    controls.containerroot_side:MoveTo(pt_containerroot_side, GLOBAL.Vector3(300, 0, pt_containerroot_side.z), 0.3)
 
+    local pt_bottomright_root = controls.bottomright_root:GetPosition()
+    controls.bottomright_root:MoveTo(pt_bottomright_root, GLOBAL.Vector3(300, 0, pt_bottomright_root.z), 0.3)
+    
+    local pt_bottom_root = controls.bottom_root:GetPosition()
+    controls.bottom_root:MoveTo(pt_bottom_root, GLOBAL.Vector3(0, -200, pt_bottom_root.z), 0.3)
+
+    local pt_left_root = controls.left_root:GetPosition()
+    controls.left_root:MoveTo(pt_left_root, GLOBAL.Vector3(-800, 0, pt_left_root.z), 0.3)
 
     GLOBAL.ThePlayer:DoTaskInTime(0.3, function()
         CURRENT_HUD_MOD = mod_id
@@ -138,22 +137,21 @@ function applyHUD(mod_id)
             updateBuild(container.bganim)
         end
     end)
-    
+
     GLOBAL.ThePlayer:DoTaskInTime(0.5, function()
-        local pt = controls.craftingmenu:GetPosition()
-        controls.craftingmenu:MoveTo(pt, pt_cftmenu, 0.5)
-
-        local pt = controls.inv:GetPosition()
-        controls.inv:MoveTo(pt, pt_inv, 0.5)
-
-        local pt = controls.mapcontrols:GetPosition()
-        controls.mapcontrols:MoveTo(pt, pt_mapcontrols, 0.5)
-
-        local pt = controls.containerroot_side:GetPosition()
-        controls.containerroot_side:MoveTo(pt, pt_containerroot_side, 0.5)
-        
         local pt = controls.topright_root:GetPosition()
         controls.topright_root:MoveTo(pt, pt_topright_root, 0.5)
 
+        local pt = controls.containerroot_side:GetPosition()
+        controls.containerroot_side:MoveTo(pt, pt_containerroot_side, 0.5)
+
+        local pt = controls.bottomright_root:GetPosition()
+        controls.bottomright_root:MoveTo(pt, pt_bottomright_root, 0.5)
+
+        local pt = controls.bottom_root:GetPosition()
+        controls.bottom_root:MoveTo(pt, pt_bottom_root, 0.5)
+
+        local pt = controls.left_root:GetPosition()
+        controls.left_root:MoveTo(pt, pt_left_root, 0.5)
     end)
 end
