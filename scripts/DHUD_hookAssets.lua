@@ -1,4 +1,7 @@
 local function ProcessAtlasPath(atlas, replacement)
+    if replacement == nil or replacement == "" then
+        return atlas
+    end
     -- 处理包含../mods/workshop-前缀的情况
     if atlas:find("mods/workshop") then
         -- print(111)
@@ -87,6 +90,20 @@ end
 
 CURRENT_HUD_MOD = GetModConfigData("HUD_ON_DEFAULT_AREA")
 function applyHUD(mod_id)
+    local enabled = false
+    for _, v in pairs(ENABLED_HUD_MODS) do
+        if v == mod_id then
+            enabled = true
+            break
+        end
+    end
+    if not enabled then
+        print("[HUD]: HUD mod not enabled: " , mod_id)
+        return
+    end
+    if CURRENT_HUD_MOD == mod_id then
+        return
+    end
     local controls = GLOBAL.ThePlayer.HUD.controls
 
     local pt_topright_root = controls.topright_root:GetPosition()

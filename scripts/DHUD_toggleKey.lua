@@ -9,8 +9,7 @@ local function OnKeyPressed(key)
             end
         end
         current_index = current_index % #ENABLED_HUD_MODS + 1
-        CURRENT_HUD_MOD = ENABLED_HUD_MODS[current_index]
-        applyHUD(CURRENT_HUD_MOD)
+        applyHUD(ENABLED_HUD_MODS[current_index])
 	end
 end
 
