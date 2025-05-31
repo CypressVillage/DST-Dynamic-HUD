@@ -4,8 +4,20 @@ local KnownModIndex = GLOBAL.KnownModIndex
 Assets = {}
 
 SUPPORTED_HUD_MODS = {
-    "workshop-2250176974", -- Roseate HUD
+    "workshop-3456159081", -- Archive HUD
+    "workshop-2571443104", -- Celestial HUD
+    -- "workshop-3285344272", -- Celestial HUD Fixed
+    "workshop-2854270129", -- Clean HUD *
+    "workshop-3381333362", -- Merrymaker HUD
     "workshop-2226345952", -- Nautical HUD
+"workshop-1992293314", -- Nightmare HUD
+    "workshop-2284894693", -- Pig Ruins HUD * 
+    "workshop-3173870597", -- Redux HUD
+    "workshop-2250176974", -- Roseate HUD
+    "workshop-2954087809", -- Soul Infused HUD
+    "workshop-1824509831", -- The Battle Arena HUD
+    "workshop-2329943377", -- The Lunar HUD * 
+    "workshop-2238885511", -- The Verdant HUD *
     "workshop-1583765151", -- Victorian HUD
 }
 
@@ -186,13 +198,18 @@ local function applyHUD(mod_id)
 end
 
 local function OnKeyPressed(key)
-    if key == 104 and not HIDE_HUD then
-        if hud then
-            applyHUD("workshop-2250176974")
-        else
-            applyHUD("workshop-1583765151")
+    if key == 104 then
+        -- 循环切换HUD
+        local current_index = 1
+        for i, mod_id in ipairs(ENABLED_HUD_MODS) do
+            if mod_id == CURRENT_HUD_MOD then
+                current_index = i
+                break
+            end
         end
-		hud = not hud
+        current_index = current_index % #ENABLED_HUD_MODS + 1
+        CURRENT_HUD_MOD = ENABLED_HUD_MODS[current_index]
+        applyHUD(CURRENT_HUD_MOD)
 	end
 end
 
