@@ -1,7 +1,23 @@
 name = "[DST] Dynamic HUD"
-author = "CypressVillage"
+author = "三九四九冰上走"
 version = "0.1.0"
-description = "A mod that allows you to toggle different HUD by area, season, time or special events.\n\n"
+description = [[
+本模组允许你根据当前环境动态切换不同的HUD。
+
+注意事项：
+- 必须同时启用对应的HUD模组，切换HUD功能才会生效
+
+HUD兼容列表：
+- Merrymaker HUD（workshop-3381333362）
+- Nautical HUD（workshop-2226345952）
+- Nightmare HUD（workshop-1992293314）
+- Redux HUD（workshop-3173870597）
+- Roseate HUD（workshop-2250176974）
+- Soul Infused HUD（workshop-2954087809）
+- The Battle Arena HUD（workshop-1824509831）
+- Victorian HUD（workshop-1583765151）
+
+]]
 
 forumthread = ""
 
@@ -49,7 +65,7 @@ local hud_table = {
 
 configuration_options = {
     title("【HUD偏好设置】"),
-    title("不同地形HUD设置"),
+    title("不同地形HUD"),
     {
         name = "HUD_ON_DEFAULT_AREA",
         label = "默认",
