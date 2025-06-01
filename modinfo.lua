@@ -1,6 +1,6 @@
 name = "[DST] Dynamic HUD"
 author = "三九四九冰上走"
-version = "0.1.0"
+version = "0.1.1"
 description = [[
 本模组允许你根据当前环境动态切换不同的HUD。
 

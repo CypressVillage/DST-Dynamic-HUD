@@ -94,6 +94,16 @@ local function updateBuild(inst)
     end
 end
 
+local function storePositions()
+    local controls = GLOBAL.ThePlayer.HUD.controls
+    pt_topright_root = controls.topright_root:GetPosition()
+    pt_containerroot_side = controls.containerroot_side:GetPosition()
+    pt_bottomright_root = controls.bottomright_root:GetPosition()
+    pt_bottom_root = controls.bottom_root:GetPosition()
+    pt_left_root = controls.left_root:GetPosition()
+end
+shouldstoreposition = true
+
 CURRENT_HUD_MOD = GetModConfigData("HUD_ON_DEFAULT_AREA")
 function applyHUD(mod_id)
     local enabled = false
@@ -112,20 +122,15 @@ function applyHUD(mod_id)
     end
     local controls = GLOBAL.ThePlayer.HUD.controls
 
+    if shouldstoreposition then
+        storePositions()
+        shouldstoreposition = false
+    end
     if GetModConfigData("ENABLE_FLUENT_ANIM") then
-        pt_topright_root = controls.topright_root:GetPosition()
         controls.topright_root:MoveTo(pt_topright_root, GLOBAL.Vector3(300, 0, pt_topright_root.z), 0.3)
-        
-        pt_containerroot_side = controls.containerroot_side:GetPosition()
         controls.containerroot_side:MoveTo(pt_containerroot_side, GLOBAL.Vector3(300, 0, pt_containerroot_side.z), 0.3)
-        
-        pt_bottomright_root = controls.bottomright_root:GetPosition()
         controls.bottomright_root:MoveTo(pt_bottomright_root, GLOBAL.Vector3(300, 0, pt_bottomright_root.z), 0.3)
-        
-        pt_bottom_root = controls.bottom_root:GetPosition()
         controls.bottom_root:MoveTo(pt_bottom_root, GLOBAL.Vector3(0, -200, pt_bottom_root.z), 0.3)
-        
-        pt_left_root = controls.left_root:GetPosition()
         controls.left_root:MoveTo(pt_left_root, GLOBAL.Vector3(-800, 0, pt_left_root.z), 0.3)
     end
     
