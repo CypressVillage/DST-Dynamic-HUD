@@ -143,17 +143,31 @@ function applyHUD(mod_id)
             updateBuild(controls.seasonclock._anim)
         end
         
-        updateBuild(controls.status.stomach.backing)
-        updateBuild(controls.status.heart.backing)
-        updateBuild(controls.status.brain.backing)
-        updateBuild(controls.status.boatmeter.backing)
-        updateBuild(controls.status.moisturemeter.backing)
-        
-        updateBuild(controls.status.stomach.circleframe) -- 饱食度边框
-        updateBuild(controls.status.heart.circleframe2) -- 血量边框
-        controls.status.brain.circleframe2:GetAnimState():OverrideSymbol("frame_circle", "status_meter", "frame_circle") -- 理智边框
-        controls.status.boatmeter.anim:GetAnimState():OverrideSymbol("frame_circle", "status_meter", "frame_circle") -- 船只耐久边框
-        updateBuild(controls.status.moisturemeter.circleframe) -- 潮湿度边框
+        updateBuild(controls.status.stomach.backing) -- 饱食度边框
+        updateBuild(controls.status.stomach.circleframe)
+        updateBuild(controls.status.heart.backing) -- 血量边框
+        updateBuild(controls.status.heart.circleframe2)
+        updateBuild(controls.status.brain.backing) -- 理智边框
+        controls.status.brain.circleframe2:GetAnimState():OverrideSymbol("frame_circle", "status_meter", "frame_circle")
+        updateBuild(controls.status.boatmeter.backing) -- 船只耐久边框
+        controls.status.boatmeter.anim:GetAnimState():OverrideSymbol("frame_circle", "status_meter", "frame_circle")
+        updateBuild(controls.status.moisturemeter.backing) -- 潮湿度边框
+        updateBuild(controls.status.moisturemeter.circleframe)
+        if controls.status.mightybadge then
+            updateBuild(controls.status.mightybadge.backing) -- 大力士健身值边框
+            updateBuild(controls.status.mightybadge.circleframe)
+        end
+        if controls.status.pethealthbadge then
+            updateBuild(controls.status.pethealthbadge.backing) -- 阿比边框
+            updateBuild(controls.status.pethealthbadge.circleframe)
+        end
+        if controls.status.werebadge then
+            updateBuild(controls.status.werebadge.backing) -- 伍迪边框
+        end
+        if controls.status.inspirationbadge then
+            updateBuild(controls.status.inspirationbadge.backing) -- 女武神激励值边框
+            updateBuild(controls.status.inspirationbadge.circleframe)
+        end
 
         for _, container in pairs(controls.containers) do
             updateBuild(container.bganim)
