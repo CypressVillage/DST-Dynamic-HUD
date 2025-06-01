@@ -3,6 +3,7 @@ HUD_EVENTS_PRIORITY = {
     AREA_CHANGE = {
         ON_DEFAULT_AREA = GetModConfigData("P_ON_DEFAULT_AREA"),
         ON_BOAT = GetModConfigData("P_ON_BOAT"),
+        ON_CAVE = GetModConfigData("P_ON_CAVE"),
     },
     -- TIME_CHANGE = {
     --     DAY = 5,
@@ -26,6 +27,7 @@ end
 HUD_ = {
     ON_DEFAULT_AREA = GetModConfigData("HUD_ON_DEFAULT_AREA"),
     ON_BOAT = GetModConfigData("HUD_ON_BOAT"),
+    ON_CAVE = GetModConfigData("HUD_ON_CAVE"),
 }
 
 local function OnHUDEvent()
@@ -84,5 +86,29 @@ AddPlayerPostInit(function(inst)
     end)
     inst:ListenForEvent("got_off_platform", function()
         updateHUDbyEvent("AREA_CHANGE", "ON_DEFAULT_AREA")
+    end)
+    inst:ListenForEvent("enter_cave", function()
+        updateHUDbyEvent("AREA_CHANGE", "ON_CAVE")
+    end)
+    inst:ListenForEvent("changearea", function(inst, area)
+        if area == nil then
+            return
+        end
+        if GLOBAL.TheWorld:HasTag("cave") then
+            updateHUDbyEvent("AREA_CHANGE", "ON_CAVE")
+        else
+            updateHUDbyEvent("AREA_CHANGE", "ON_DEFAULT_AREA")
+        end
+        -- GLOBAL.ThePlayer.components.talker:Say("[HUD]: Area changed！")
+        -- print("[HUD]: Area changed to ", area.id)
+        -- print("type", area.type)
+        -- print("center", area.center)
+        -- print("poly", area.poly)
+        -- print("tags", area.tags)
+        -- if area.tags then
+        --     for _, t in pairs(area.tags) do
+        --         print("tag", t)
+        --     end
+        -- end
     end)
 end)

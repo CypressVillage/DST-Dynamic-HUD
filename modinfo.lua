@@ -102,13 +102,13 @@ configuration_options = {
         options = hud_table,
         default = "workshop-2226345952", -- Nautical HUD
     },
-    -- {
-    --     name = "HUD_ON_CAVE",
-    --     label = "洞穴HUD",
-    --     hover = "角色进入洞穴区域时使用的HUD",
-    --     options = hud_table,
-    --     default = "workshop-1583765151", -- Victorian HUD
-    -- },
+    {
+        name = "HUD_ON_CAVE",
+        label = "洞穴",
+        hover = "角色进入洞穴区域时使用的HUD",
+        options = hud_table,
+        default = "workshop-1583765151", -- Victorian HUD
+    },
     emptyline,
     title("【HUD优先级设置】"),
     title("不同地形优先级"),
@@ -126,13 +126,13 @@ configuration_options = {
         options = priority_table,
         default = 6,
     },
-    -- {
-    --     name = "P_ON_CAVE",
-    --     label = "洞穴",
-    --     hover = "角色进入洞穴区域的优先级",
-    --     options = priority_table,
-    --     default = 0,
-    -- },
+    {
+        name = "P_ON_CAVE",
+        label = "洞穴",
+        hover = "角色进入洞穴区域的优先级",
+        options = priority_table,
+        default = 6,
+    },
     -- emptyline,
     -- title("特定时间优先级"),
     -- {
