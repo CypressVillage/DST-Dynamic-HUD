@@ -17,6 +17,9 @@ end
 local Image = require("widgets/image")
 local _SetTexture = Image.SetTexture -- 这个必须在其他mod执行后执行？
 Image.SetTexture = function(self, atlas, tex, ...)
+    if type(atlas) ~= "string" or type(tex) ~= "string" then
+        return _SetTexture(self, atlas, tex, ...)
+    end
     if atlas:find("modicon.xml") then
         return _SetTexture(self, atlas, tex, ...)
     end
