@@ -53,6 +53,7 @@ local priority_table = {
     {description = "9", data = 9},
 }
 local hud_table = {
+    {description = "Celestial HUD", data = "workshop-3285344272"},
     {description = "Merrymaker HUD", data = "workshop-3381333362"},
     {description = "Nautical HUD", data = "workshop-2226345952"},
     {description = "Nightmare HUD", data = "workshop-1992293314"},
