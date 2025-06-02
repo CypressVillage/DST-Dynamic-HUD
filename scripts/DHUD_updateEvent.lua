@@ -4,6 +4,7 @@ HUD_EVENTS_PRIORITY = {
         ON_DEFAULT_AREA = GetModConfigData("P_ON_DEFAULT_AREA"),
         ON_BOAT = GetModConfigData("P_ON_BOAT"),
         ON_CAVE = GetModConfigData("P_ON_CAVE"),
+        ON_LUNACY_AREA = GetModConfigData("P_ON_LUNACY_AREA"),
     },
     -- TIME_CHANGE = {
     --     DAY = 5,
@@ -28,6 +29,7 @@ HUD_ = {
     ON_DEFAULT_AREA = GetModConfigData("HUD_ON_DEFAULT_AREA"),
     ON_BOAT = GetModConfigData("HUD_ON_BOAT"),
     ON_CAVE = GetModConfigData("HUD_ON_CAVE"),
+    ON_LUNACY_AREA = GetModConfigData("HUD_ON_LUNACY_AREA"),
 }
 
 local function OnHUDEvent()
@@ -84,18 +86,14 @@ AddPlayerPostInit(function(inst)
     inst:ListenForEvent("got_on_platform", function()
         updateHUDbyEvent("AREA_CHANGE", "ON_BOAT")
     end)
-    inst:ListenForEvent("got_off_platform", function()
-        updateHUDbyEvent("AREA_CHANGE", "ON_DEFAULT_AREA")
-    end)
-    inst:ListenForEvent("enter_cave", function()
-        updateHUDbyEvent("AREA_CHANGE", "ON_CAVE")
-    end)
     inst:ListenForEvent("changearea", function(inst, area)
         if area == nil then
             return
         end
         if GLOBAL.TheWorld:HasTag("cave") then
             updateHUDbyEvent("AREA_CHANGE", "ON_CAVE")
+        elseif area.tags and table.contains(area.tags, "lunacyarea") then
+            updateHUDbyEvent("AREA_CHANGE", "ON_LUNACY_AREA")
         else
             updateHUDbyEvent("AREA_CHANGE", "ON_DEFAULT_AREA")
         end

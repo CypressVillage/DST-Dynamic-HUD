@@ -1,6 +1,6 @@
 name = "[DST] Dynamic HUD"
 author = "三九四九冰上走"
-version = "0.1.1"
+version = "0.1.2"
 description = [[
 本模组允许你根据当前环境动态切换不同的HUD。
 
@@ -8,6 +8,7 @@ description = [[
 - 必须同时启用对应的HUD模组，切换HUD功能才会生效
 
 HUD兼容列表：
+- Celestial HUD [Fixed]（workshop-3285344272）
 - Merrymaker HUD（workshop-3381333362）
 - Nautical HUD（workshop-2226345952）
 - Nightmare HUD（workshop-1992293314）
@@ -110,6 +111,13 @@ configuration_options = {
         options = hud_table,
         default = "workshop-1583765151", -- Victorian HUD
     },
+    {
+        name = "HUD_ON_LUNACY_AREA",
+        label = "启蒙区域",
+        hover = "角色进入启蒙区域时使用的HUD",
+        options = hud_table,
+        default = "workshop-3285344272", -- Celestial HUD
+    },
     emptyline,
     title("【HUD优先级设置】"),
     title("不同地形优先级"),
@@ -134,6 +142,13 @@ configuration_options = {
         options = priority_table,
         default = 6,
     },
+    {
+        name = "P_ON_LUNACY_AREA",
+        label = "启蒙区域",
+        hover = "角色进入启蒙区域的优先级",
+        options = priority_table,
+        default = 6,
+    }
     -- emptyline,
     -- title("特定时间优先级"),
     -- {
