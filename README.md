@@ -23,8 +23,7 @@ github: [CypressVillage/DST-Dynamic-HUD](https://github.com/CypressVillage/DST-D
 | HUD 名称             | workshop 地址                                                                                                                 | 兼容情况 |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------- |
 | Archive HUD          | [Steam 创意工坊::[DST] Archive HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3456159081&searchtext=HUD)            | ✅       |
-| Celestial HUD        | [Steam 创意工坊::Celestial HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=2571443104)                               | ❌       |
-| Celestial HUD Fixed  | [Steam 创意工坊::[DST]Celestial HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3285344272&searchtext=HUD)           | ❌       |
+| Celestial HUD Fixed  | [Steam 创意工坊::[DST]Celestial HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3285344272&searchtext=HUD)           | ✅       |
 | Merrymaker HUD       | [Steam 创意工坊::[DST] Merrymaker HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3381333362&searchtext=HUD)         | ✅       |
 | Nautical HUD         | [Steam 创意工坊::[DST] Nautical HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=2226345952&searchtext=HUD)           | ✅       |
 | Nightmare HUD        | [Steam 创意工坊::[DST] Nightmare HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=1992293314&searchtext=HUD)          | ✅       |
@@ -37,3 +36,4 @@ github: [CypressVillage/DST-Dynamic-HUD](https://github.com/CypressVillage/DST-D
 | Pig Ruins HUD        | [Steam 创意工坊::Pig Ruins HUD mod](https://steamcommunity.com/sharedfiles/filedetails/?id=2284894693&searchtext=HUD)            | 🔘       |
 | The Lunar HUD        | [Steam 创意工坊::The Lunar HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=2329943377&searchtext=HUD)                | 🔘       |
 | The Verdant HUD      | [Steam 创意工坊::The Verdant HUD Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=2238885511&searchtext=HUD)          | 🔘       |
+| Celestial HUD        | [Steam 创意工坊::Celestial HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=2571443104)                               | ❌       |
