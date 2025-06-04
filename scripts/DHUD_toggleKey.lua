@@ -1,28 +1,21 @@
-local function OnKeyPressed(key)
-    if not GetModConfigData("ENABLE_TOGGLE_KEY") then
+local function OnKeyPressed()
+    if GLOBAL.ThePlayer == nil or not GLOBAL.ThePlayer.HUD then
         return
     end
-    if key == 104 then
-        -- 循环切换HUD
-        local current_index = 1
-        for i, mod_id in ipairs(ENABLED_HUD_MODS) do
-            if mod_id == CURRENT_HUD_MOD then
-                current_index = i
-                break
-            end
+    local current_index = 1
+    for i, mod_id in ipairs(ENABLED_HUD_MODS) do
+        if mod_id == CURRENT_HUD_MOD then
+            current_index = i
+            break
         end
-        current_index = current_index % #ENABLED_HUD_MODS + 1
-        applyHUD(ENABLED_HUD_MODS[current_index])
-	end
+    end
+    current_index = current_index % #ENABLED_HUD_MODS + 1
+    applyHUD(ENABLED_HUD_MODS[current_index])
 end
 
-local function OnRawKey(key, down)
-  	if (key and not down) then
-      	OnKeyPressed(key)
-  	end
-end
+local handler = nil -- 按键事件处理器
 
-local function ControlsPostConstruct(inst)
-	inst.handler = GLOBAL.TheInput:AddKeyHandler(function(key, down) OnRawKey(key, down) end )
+function KeyBind(_, key)
+  if handler then handler:Remove() end -- 禁用旧绑定
+  handler = key and GLOBAL.TheInput:AddKeyDownHandler(key, OnKeyPressed) or nil -- 新建绑定或无绑定
 end
-AddClassPostConstruct("widgets/controls", ControlsPostConstruct)
