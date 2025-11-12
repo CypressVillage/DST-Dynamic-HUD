@@ -13,10 +13,10 @@ SUPPORTED_HUD_MODS = {
     "workshop-1583765151", -- Victorian HUD
     
     -- "workshop-2571443104", -- Celestial HUD *
-    -- "workshop-2854270129", -- Clean HUD *
-    -- "workshop-2284894693", -- Pig Ruins HUD * 
-    -- "workshop-2329943377", -- The Lunar HUD * 
-    -- "workshop-2238885511", -- The Verdant HUD *
+    -- "workshop-2854270129", -- Clean HUD * 会影响其他HUD，废弃
+    "workshop-2284894693", -- Pig Ruins HUD * 
+    "workshop-2329943377", -- The Lunar HUD * 
+    "workshop-2238885511", -- The Verdant HUD *
 }
 
 ENABLED_HUD_MODS = {}
@@ -29,6 +29,8 @@ for _, mod_id in ipairs(SUPPORTED_HUD_MODS) do
         modimport('buildoverride/' .. mod_id .. '.lua')
     end
 end
+
+local init_ = GLOBAL.ModManager.InitializeModMain
 
 if #ENABLED_HUD_MODS == 0 then
     print("[HUD]: No supported HUD mods are enabled.")

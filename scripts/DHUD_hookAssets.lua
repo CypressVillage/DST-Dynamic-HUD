@@ -1,17 +1,47 @@
+-- 试图加载原始HUD的atlas路径
+local function getOriginAtlasPath(atlas)
+    if atlas:find("images/avatars/") then
+        return "images/avatars.xml"
+    elseif atlas:find("images/crafting_menu/") then
+        return "images/crafting_menu.xml"
+    elseif atlas:find("images/frontend/") then
+        return "images/frontend.xml"
+    elseif atlas:find("images/hud/") then
+        return "images/hud.xml"
+    elseif atlas:find("images/hud2/") then
+        return "images/hud2.xml"
+    elseif atlas:find("images/ui/") then
+        return "images/ui.xml"
+    else
+        print("[HUD]: getOriginAtlasPath: Unhandled atlas path: ", atlas)
+        return atlas
+    end
+end
+
+-- 该函数保证返回一个有效的atlas路径
 local function ProcessAtlasPath(atlas, replacement)
     if replacement == nil or replacement == "" then
         return atlas
     end
-    -- 处理包含../mods/workshop-前缀的情况
-    if atlas:find("mods/workshop") then
-        -- print(111)
-        return atlas:gsub("workshop%-%d+", replacement, 1)
-    -- 处理不包含workshop-且不包含../的情况
-    elseif not atlas:find("workshop%-") and not atlas:find("%.%.%/") then
-        return "../mods/"..replacement.."/"..atlas
+    atlas_ = atlas
+    if replacement == "origin" then -- 处理还原为原生HUD的情况，此处未完成
+        if atlas:find("../mods/workshop") then
+            atlas_ = getOriginAtlasPath(atlas)
+            return GLOBAL.softresolvefilepath(atlas_) or atlas -- 原生HUD不需要处理
+        else
+            return atlas
+        end
+    else
+        -- 处理包含../mods/workshop-前缀的情况，即该build被本mod修改过
+        if atlas:find("mods/workshop") then
+            atlas_ = atlas:gsub("workshop%-%d+", replacement, 1)
+            -- 处理不包含workshop-且不包含../的情况，此时的build可能是原生build或HUD模组更改过的
+        elseif not atlas:find("workshop%-") and not atlas:find("%.%.%/") then
+            atlas_ = "../mods/"..replacement.."/"..atlas
+        end
+        atlas_ = GLOBAL.softresolvefilepath(atlas_, false, "")
+        return atlas_ or getOriginAtlasPath(atlas)
     end
-    -- 其他情况保持原样
-    return atlas
 end
 
 local Image = require("widgets/image")
@@ -24,9 +54,8 @@ Image.SetTexture = function(self, atlas, tex, ...)
         return _SetTexture(self, atlas, tex, ...)
     end
     atlas_ = ProcessAtlasPath(atlas, CURRENT_HUD_MOD)
-    atlas_ = GLOBAL.softresolvefilepath(atlas_)
-    atlas = atlas_ or atlas
-    return _SetTexture(self, atlas, tex, ...)
+    print("[HUD]: SetTexture atlas: ", atlas, " -> ", atlas_)
+    return _SetTexture(self, atlas_, tex, ...)
 end
 
 local function reloadAllTexture(widget)
@@ -48,6 +77,12 @@ local function reloadAllTexture(widget)
 end
 
 local function processBuildOverride(buildname)
+    if CURRENT_HUD_MOD == "origin" then
+        return buildname
+    end
+    if type(buildname) ~= "string" then
+        return buildname
+    end
     if buildname:find("workshop") then
         buildname = buildname:gsub("workshop%-%d+_", "", 1)
     end

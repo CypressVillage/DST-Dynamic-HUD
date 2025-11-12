@@ -1,13 +1,14 @@
 name = "[DST] Dynamic HUD"
 author = "三九四九冰上走"
-version = "0.1.3"
+version = "0.1.4"
 description = [[
 本模组允许你根据当前环境动态切换不同的HUD。
 
 注意事项：
 - 必须同时启用对应的HUD模组，切换HUD功能才会生效
 
-HUD兼容列表：
+HUD兼容列表，*号表示由于原 HUD 过旧，兼容性差：
+- Archive HUD（workshop-3456159081）
 - Celestial HUD [Fixed]（workshop-3285344272）
 - Merrymaker HUD（workshop-3381333362）
 - Nautical HUD（workshop-2226345952）
@@ -17,7 +18,9 @@ HUD兼容列表：
 - Soul Infused HUD（workshop-2954087809）
 - The Battle Arena HUD（workshop-1824509831）
 - Victorian HUD（workshop-1583765151）
-
+- *Pig Ruins HUD（workshop-2284894693）
+- *The Lunar HUD（workshop-2329943377）
+- *The Verdant HUD（workshop-2238885511）
 ]]
 
 forumthread = ""
@@ -54,7 +57,9 @@ local priority_table = {
     {description = "9", data = 9},
 }
 local hud_table = {
-    {description = "Celestial HUD", data = "workshop-3285344272"},
+    -- {description = "Origin HUD", data = "origin"},
+    {description = "Archive HUD", data = "workshop-3456159081"},
+    {description = "Celestial HUD [Fixed]", data = "workshop-3285344272"},
     {description = "Merrymaker HUD", data = "workshop-3381333362"},
     {description = "Nautical HUD", data = "workshop-2226345952"},
     {description = "Nightmare HUD", data = "workshop-1992293314"},
@@ -63,6 +68,10 @@ local hud_table = {
     {description = "Soul Infused HUD", data = "workshop-2954087809"},
     {description = "The Battle Arena HUD", data = "workshop-1824509831"},
     {description = "Victorian HUD", data = "workshop-1583765151"},
+    -- {description = "Clean HUD", data = "workshop-2854270129"}, -- 会影响其他HUD，废弃
+    {description = "Pig Ruins HUD", data = "workshop-2284894693"},
+    {description = "The Lunar HUD", data = "workshop-2329943377"},
+    {description = "The Verdant HUD", data = "workshop-2238885511"},
 }
 local keyboard = { -- from STRINGS.UI.CONTROLSSCREEN.INPUTS[1] of strings.lua, need to match constants.lua too.
   { 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Print', 'ScrolLock', 'Pause' },
