@@ -1,6 +1,6 @@
 name = "[DST] Dynamic HUD"
 author = "三九四九冰上走"
-version = "0.1.4"
+version = "0.1.5"
 description = [[
 本模组允许你根据当前环境动态切换不同的HUD。
 
@@ -8,9 +8,11 @@ description = [[
 - 必须同时启用对应的HUD模组，切换HUD功能才会生效
 
 HUD兼容列表，*号表示由于原 HUD 过旧，兼容性差：
+- Origin HUD（原版HUD） ** 该功能仍有bug，下周就能开发完
 - Archive HUD（workshop-3456159081）
 - Celestial HUD [Fixed]（workshop-3285344272）
 - Merrymaker HUD（workshop-3381333362）
+- Mystery HUD（workshop-3548608555）
 - Nautical HUD（workshop-2226345952）
 - Nightmare HUD（workshop-1992293314）
 - Redux HUD（workshop-3173870597）
@@ -57,10 +59,11 @@ local priority_table = {
     {description = "9", data = 9},
 }
 local hud_table = {
-    -- {description = "Origin HUD", data = "origin"},
+    {description = "Origin HUD", data = "origin"},
     {description = "Archive HUD", data = "workshop-3456159081"},
     {description = "Celestial HUD [Fixed]", data = "workshop-3285344272"},
     {description = "Merrymaker HUD", data = "workshop-3381333362"},
+    {description = "Mystery HUD", data = "workshop-3548608555"},
     {description = "Nautical HUD", data = "workshop-2226345952"},
     {description = "Nightmare HUD", data = "workshop-1992293314"},
     {description = "Redux HUD", data = "workshop-3173870597"},

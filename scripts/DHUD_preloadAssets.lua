@@ -4,6 +4,7 @@ SUPPORTED_HUD_MODS = {
     "workshop-3456159081", -- Archive HUD
     "workshop-3285344272", -- Celestial HUD Fixed
     "workshop-3381333362", -- Merrymaker HUD
+    "workshop-3548608555", -- Mystery HUD
     "workshop-2226345952", -- Nautical HUD
     "workshop-1992293314", -- Nightmare HUD
     "workshop-3173870597", -- Redux HUD
@@ -19,6 +20,7 @@ SUPPORTED_HUD_MODS = {
     "workshop-2238885511", -- The Verdant HUD *
 }
 
+-- ENABLED_HUD_MODS = { "origin" } // origin HUD 仍存在bug
 ENABLED_HUD_MODS = {}
 BUILD_OVERRIDE = {}
 

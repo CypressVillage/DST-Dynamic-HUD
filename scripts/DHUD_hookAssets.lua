@@ -13,9 +13,12 @@ local function getOriginAtlasPath(atlas)
     elseif atlas:find("images/ui/") then
         return "images/ui.xml"
     else
-        print("[HUD]: getOriginAtlasPath: Unhandled atlas path: ", atlas)
-        return atlas
+        return nil
     end
+end
+
+local function getUnprefixedAtlasPath(atlas)
+    return atlas:gsub("^%.%./mods/workshop%-%d+/", "", 1)
 end
 
 -- 该函数保证返回一个有效的atlas路径
@@ -23,24 +26,26 @@ local function ProcessAtlasPath(atlas, replacement)
     if replacement == nil or replacement == "" then
         return atlas
     end
-    atlas_ = atlas
-    if replacement == "origin" then -- 处理还原为原生HUD的情况，此处未完成
-        if atlas:find("../mods/workshop") then
-            atlas_ = getOriginAtlasPath(atlas)
-            return GLOBAL.softresolvefilepath(atlas_) or atlas -- 原生HUD不需要处理
-        else
+    local atlas_ = atlas
+    if replacement == "origin" then
+        if not atlas:find("mods/workshop") then
             return atlas
         end
+        atlas_ = getOriginAtlasPath(atlas) or getUnprefixedAtlasPath(atlas)
+        return GLOBAL.softresolvefilepath(atlas_) or atlas
     else
-        -- 处理包含../mods/workshop-前缀的情况，即该build被本mod修改过
         if atlas:find("mods/workshop") then
+            -- 处理包含../mods/workshop-前缀的情况，即该build被本mod修改过
+            -- ../mods/workshop-xxx/source.xml -> ../mods/workshop-yyy/source.xml
             atlas_ = atlas:gsub("workshop%-%d+", replacement, 1)
-            -- 处理不包含workshop-且不包含../的情况，此时的build可能是原生build或HUD模组更改过的
         elseif not atlas:find("workshop%-") and not atlas:find("%.%.%/") then
+            -- 处理不包含workshop-且不包含../的情况，此时的build可能是HUD模组更改过的
+            -- source.xml -> ../mods/workshop-xxx/source.xml
             atlas_ = "../mods/"..replacement.."/"..atlas
         end
+        -- 如果是HUD模组没有更改过的build，此时会得到一个错误路径，交给softresolvefilepath处理
         atlas_ = GLOBAL.softresolvefilepath(atlas_, false, "")
-        return atlas_ or getOriginAtlasPath(atlas)
+        return atlas_ or getOriginAtlasPath(atlas) or atlas
     end
 end
 
@@ -68,7 +73,7 @@ local function reloadAllTexture(widget)
             widget:SetTexture(widget.atlas, widget.texture)
         end
     end
-    
+
     if widget.children then
         for k, v in pairs(widget.children) do
             reloadAllTexture(v)
@@ -77,22 +82,26 @@ local function reloadAllTexture(widget)
 end
 
 local function processBuildOverride(buildname)
-    if CURRENT_HUD_MOD == "origin" then
-        return buildname
-    end
     if type(buildname) ~= "string" then
         return buildname
     end
+    local originbuildname
     if buildname:find("workshop") then
-        buildname = buildname:gsub("workshop%-%d+_", "", 1)
+        originbuildname = buildname:gsub("workshop%-%d+_", "", 1)
+    else
+        originbuildname = buildname
     end
-    if CURRENT_HUD_MOD and BUILD_OVERRIDE[CURRENT_HUD_MOD] then
-        local build_override = BUILD_OVERRIDE[CURRENT_HUD_MOD][buildname]
-        if build_override then
-            return build_override
+    if CURRENT_HUD_MOD == "origin" then
+        return originbuildname
+    else
+        if CURRENT_HUD_MOD and BUILD_OVERRIDE[CURRENT_HUD_MOD] then
+            local build_override = BUILD_OVERRIDE[CURRENT_HUD_MOD][originbuildname]
+            if build_override then
+                return build_override
+            end
         end
     end
-    return buildname
+    return originbuildname
 end
 
 local _SetBuild = GLOBAL.AnimState.SetBuild

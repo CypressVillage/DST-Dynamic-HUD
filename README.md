@@ -18,13 +18,14 @@ github: [CypressVillage/DST-Dynamic-HUD](https://github.com/CypressVillage/DST-D
 
 - ✅：完全兼容
 - 🔘：兼容性差，由于原 mod 过旧导致无法切换所有界面
-- ❌：不兼容
+- ❌：不兼容，强制启用会影响其他 HUD 的显示效果
 
 | HUD 名称             | workshop 地址                                                                                                                 | 兼容情况 |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------- |
 | Archive HUD          | [Steam 创意工坊::[DST] Archive HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3456159081&searchtext=HUD)            | ✅       |
 | Celestial HUD Fixed  | [Steam 创意工坊::[DST]Celestial HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3285344272&searchtext=HUD)           | ✅       |
 | Merrymaker HUD       | [Steam 创意工坊::[DST] Merrymaker HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3381333362&searchtext=HUD)         | ✅       |
+| Mystery HUD       | [Steam 创意工坊::[DST] Merrymaker HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3548608555&searchtext=HUD)         | ✅       |
 | Nautical HUD         | [Steam 创意工坊::[DST] Nautical HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=2226345952&searchtext=HUD)           | ✅       |
 | Nightmare HUD        | [Steam 创意工坊::[DST] Nightmare HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=1992293314&searchtext=HUD)          | ✅       |
 | Redux HUD            | [Steam 创意工坊::Redux HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3173870597&searchtext=HUD)                    | ✅       |
