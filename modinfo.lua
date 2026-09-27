@@ -8,7 +8,7 @@ description = [[
 - 必须同时启用对应的HUD模组，切换HUD功能才会生效
 
 HUD兼容列表，*号表示由于原 HUD 过旧，兼容性差：
-- Origin HUD（原版HUD） ** 该功能仍有bug，下周就能开发完
+- Origin HUD（原版HUD）
 - Archive HUD（workshop-3456159081）
 - Celestial HUD [Fixed]（workshop-3285344272）
 - Merrymaker HUD（workshop-3381333362）
@@ -123,7 +123,6 @@ configuration_options = {
     },
     emptyline,
     title("【HUD偏好设置】"),
-    title("不同地形HUD"),
     {
         name = "HUD_ON_DEFAULT_AREA",
         label = "默认",
@@ -154,7 +153,6 @@ configuration_options = {
     },
     emptyline,
     title("【HUD优先级设置】"),
-    title("不同地形优先级"),
     {
         name = "P_ON_DEFAULT_AREA",
         label = "默认区域",
