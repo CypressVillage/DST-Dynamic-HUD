@@ -9,7 +9,7 @@ SUPPORTED_HUD_MODS = {
     "workshop-1992293314", -- Nightmare HUD
     "workshop-3173870597", -- Redux HUD
     "workshop-2250176974", -- Roseate HUD
-    -- "workshop-2954087809", -- Soul Infused HUD
+    "workshop-2954087809", -- Soul Infused HUD
     "workshop-1824509831", -- The Battle Arena HUD
     "workshop-1583765151", -- Victorian HUD
     
