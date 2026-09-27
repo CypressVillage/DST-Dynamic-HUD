@@ -103,9 +103,17 @@ local function ProcessAtlasPath(atlas, tex, replacement)
         end
     end
 
-    -- 从原版合并 atlas 回退后，下一次切换仍要能找到 HUD 的单贴图 atlas。
-    -- 不同 HUD 对同一张图也可能使用不同文件名，因此还按 tex 名尝试一次。
+    -- 单贴图 HUD 切到合并图集 HUD（如 Celestial）时，同名文件不存在，
+    -- 必须先尝试目标 HUD 的合并 atlas，不能直接回退到原版。
     local origin = getOriginAtlasPath(atlas) or getUnprefixedAtlasPath(atlas)
+    if origin ~= getUnprefixedAtlasPath(atlas) then
+        local resolved = atlasContains("../mods/"..replacement.."/"..origin, tex)
+        if resolved then
+            return resolved
+        end
+    end
+
+    -- 从合并 atlas 切回单贴图 HUD；也兼容单贴图文件名不同的情况。
     local folder = origin:match("^images/([%w_]+)%.xml$")
     local name = tex:match("^([%w_%-]+)%.tex$")
     if folder and name then
