@@ -38,9 +38,31 @@ local function atlasContains(atlas, tex)
     return nil
 end
 
+local function originAtlasContains(atlas, tex)
+    -- 未识别的模组路径不能作为原版路径直接送入底层控件。
+    if not atlas:match("^images/") or atlas:find("..", 1, true) then
+        return nil
+    end
+    -- softresolvefilepath 会优先返回缓存路径；当其他 HUD 覆盖了同名
+    -- atlas 时，即使传入空 search_first_path 也可能仍解析到模组资源。
+    -- 直接遍历资源搜索路径并跳过 mods，确保结果来自游戏原始资源。
+    for i = #GLOBAL.package.assetpath, 1, -1 do
+        local pathdata = GLOBAL.package.assetpath[i]
+        local path = pathdata.path or ""
+        if not path:find("[/\\]mods[/\\]") then
+            local resolved = (path..atlas):gsub("\\", "/")
+            if GLOBAL.kleifileexists(resolved, pathdata.manifest, atlas)
+                and GLOBAL.TheSim:AtlasContains(resolved, tex) then
+                return resolved
+            end
+        end
+    end
+    return nil
+end
+
 local function getOriginTextureAtlas(atlas, tex)
     local preferred = getOriginAtlasPath(atlas) or getUnprefixedAtlasPath(atlas)
-    local resolved = atlasContains(preferred, tex)
+    local resolved = originAtlasContains(preferred, tex)
     if resolved then
         return resolved
     end
@@ -48,7 +70,7 @@ local function getOriginTextureAtlas(atlas, tex)
     -- 模组贴图的目录或文件名可能与原版不同，按 tex 名再查找原版 HUD atlas。
     for _, candidate in ipairs(originAtlases) do
         if candidate ~= preferred then
-            resolved = atlasContains(candidate, tex)
+            resolved = originAtlasContains(candidate, tex)
             if resolved then
                 return resolved
             end
@@ -62,7 +84,8 @@ local function ProcessAtlasPath(atlas, tex, replacement)
         return atlas
     end
     if replacement == "origin" then
-        return getOriginTextureAtlas(atlas, tex) or atlas
+        local origin = getOriginTextureAtlas(atlas, tex)
+        return origin or atlas, origin ~= nil
     end
 
     local candidate
@@ -91,7 +114,8 @@ local function ProcessAtlasPath(atlas, tex, replacement)
             return resolved
         end
     end
-    return getOriginTextureAtlas(atlas, tex) or atlas
+    local origin = getOriginTextureAtlas(atlas, tex)
+    return origin or atlas, origin ~= nil
 end
 
 local Image = require("widgets/image")
@@ -103,7 +127,16 @@ Image.SetTexture = function(self, atlas, tex, ...)
     if atlas:find("modicon.xml") then
         return _SetTexture(self, atlas, tex, ...)
     end
-    local newatlas = ProcessAtlasPath(atlas, tex, CURRENT_HUD_MOD)
+    local newatlas, isOrigin = ProcessAtlasPath(atlas, tex, CURRENT_HUD_MOD)
+    if isOrigin then
+        -- 原版 Image:SetTexture 会再次 resolvefilepath，重新命中 HUD 的
+        -- 同名路径缓存。atlas 已经过原版路径和贴图校验，直接使用它。
+        self.atlas = newatlas
+        self.texture = tex
+        self.inst.ImageWidget:SetTexture(newatlas, tex, ...)
+        self.inst.UITransform:UpdateTransform()
+        return
+    end
     return _SetTexture(self, newatlas, tex, ...)
 end
 

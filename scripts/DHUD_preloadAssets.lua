@@ -13,7 +13,7 @@ SUPPORTED_HUD_MODS = {
     "workshop-1824509831", -- The Battle Arena HUD
     "workshop-1583765151", -- Victorian HUD
     
-    -- "workshop-2571443104", -- Celestial HUD *
+    "workshop-2571443104", -- Celestial HUD *
     -- "workshop-2854270129", -- Clean HUD * 会影响其他HUD，废弃
     "workshop-2284894693", -- Pig Ruins HUD * 
     "workshop-2329943377", -- The Lunar HUD * 
