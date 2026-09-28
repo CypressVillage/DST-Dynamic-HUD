@@ -1,33 +1,30 @@
 name = "[DST] Dynamic HUD"
 author = "三九四九冰上走"
-version = "0.1.5"
+version = "0.1.6"
 description = [[
-本模组允许你根据当前环境动态切换不同的HUD。
+根据所在区域自动切换 HUD，也可使用快捷键手动切换；
 
 注意事项：
-- 必须同时启用对应的HUD模组，切换HUD功能才会生效
+- 切换到第三方 HUD 前，必须同时启用对应的 HUD 模组；原版 HUD 无需另装模组。
 
-HUD兼容列表，*号表示由于原 HUD 过旧，兼容性差：
-- Origin HUD（原版HUD）
-- Minecraft HUD（workshop-3649427234）
-- Picnic HUD（workshop-3788570861）
-- Little Bear HUD（workshop-3802486364）
-- Xiaoke HUD（workshop-3805109176）
-- Milk Tea Cat HUD（workshop-3806868550）
-- Archive HUD（workshop-3456159081）
-- Celestial HUD [Fixed]（workshop-3285344272）
-- Merrymaker HUD（workshop-3381333362）
-- Mystery HUD（workshop-3548608555）
-- Nautical HUD（workshop-2226345952）
-- Nightmare HUD（workshop-1992293314）
-- Redux HUD（workshop-3173870597）
-- Roseate HUD（workshop-2250176974）
-- Soul Infused HUD（workshop-2954087809）
-- The Battle Arena HUD（workshop-1824509831）
-- Victorian HUD（workshop-1583765151）
-- *Pig Ruins HUD（workshop-2284894693）
-- *The Lunar HUD（workshop-2329943377）
-- *The Verdant HUD（workshop-2238885511）
+当前支持的 HUD（* 表示原模组较旧，不支持新版制作栏）：
+- Origin HUD（原版）
+- Victorian HUD（1583765151）
+- The Battle Arena HUD（1824509831）
+- Nightmare HUD（1992293314）
+- Nautical HUD（2226345952）
+- *The Verdant HUD（2238885511）
+- Roseate HUD（2250176974）
+- *Pig Ruins HUD（2284894693）
+- *The Lunar HUD（2329943377）
+- Celestial HUD（2571443104）
+- Soul Infused HUD（2954087809）
+- Redux HUD（3173870597）
+- Merrymaker HUD（3381333362）
+- Archive HUD（3456159081）
+- Mystery HUD（3548608555）
+- Minecraft HUD（3649427234）
+
 ]]
 
 forumthread = ""
@@ -65,26 +62,21 @@ local priority_table = {
 }
 local hud_table = {
     {description = "Origin HUD", data = "origin"},
-    {description = "Minecraft HUD", data = "workshop-3649427234"},
-    {description = "Picnic HUD", data = "workshop-3788570861"},
-    {description = "Little Bear HUD", data = "workshop-3802486364"},
-    {description = "Xiaoke HUD", data = "workshop-3805109176"},
-    {description = "Milk Tea Cat HUD", data = "workshop-3806868550"},
-    {description = "Archive HUD", data = "workshop-3456159081"},
-    {description = "Celestial HUD [Fixed]", data = "workshop-3285344272"},
-    {description = "Merrymaker HUD", data = "workshop-3381333362"},
-    {description = "Mystery HUD", data = "workshop-3548608555"},
-    {description = "Nautical HUD", data = "workshop-2226345952"},
-    {description = "Nightmare HUD", data = "workshop-1992293314"},
-    {description = "Redux HUD", data = "workshop-3173870597"},
-    {description = "Roseate HUD", data = "workshop-2250176974"},
-    {description = "Soul Infused HUD", data = "workshop-2954087809"},
-    {description = "The Battle Arena HUD", data = "workshop-1824509831"},
     {description = "Victorian HUD", data = "workshop-1583765151"},
-    -- {description = "Clean HUD", data = "workshop-2854270129"}, -- 会影响其他HUD，废弃
+    {description = "The Battle Arena HUD", data = "workshop-1824509831"},
+    {description = "Nightmare HUD", data = "workshop-1992293314"},
+    {description = "Nautical HUD", data = "workshop-2226345952"},
+    {description = "The Verdant HUD", data = "workshop-2238885511"},
+    {description = "Roseate HUD", data = "workshop-2250176974"},
     {description = "Pig Ruins HUD", data = "workshop-2284894693"},
     {description = "The Lunar HUD", data = "workshop-2329943377"},
-    {description = "The Verdant HUD", data = "workshop-2238885511"},
+    {description = "Celestial HUD", data = "workshop-2571443104"},
+    {description = "Soul Infused HUD", data = "workshop-2954087809"},
+    {description = "Redux HUD", data = "workshop-3173870597"},
+    {description = "Merrymaker HUD", data = "workshop-3381333362"},
+    {description = "Archive HUD", data = "workshop-3456159081"},
+    {description = "Mystery HUD", data = "workshop-3548608555"},
+    {description = "Minecraft HUD", data = "workshop-3649427234"},
 }
 local keyboard = { -- from STRINGS.UI.CONTROLSSCREEN.INPUTS[1] of strings.lua, need to match constants.lua too.
   { 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Print', 'ScrolLock', 'Pause' },
@@ -129,7 +121,7 @@ configuration_options = {
         label = "HUD切换热键",
         hover = "设置HUD切换的热键",
         options = keys,
-        default = "H", -- Default to H
+        default = "KEY_H",
     },
     emptyline,
     title("【HUD偏好设置】"),
@@ -159,7 +151,7 @@ configuration_options = {
         label = "启蒙区域",
         hover = "角色进入启蒙区域时使用的HUD",
         options = hud_table,
-        default = "workshop-3285344272", -- Celestial HUD
+        default = "workshop-2571443104", -- Celestial HUD
     },
     emptyline,
     title("【HUD优先级设置】"),

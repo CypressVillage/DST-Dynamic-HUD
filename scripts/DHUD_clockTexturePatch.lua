@@ -1,13 +1,14 @@
 -- Klei 更新后，部分旧 HUD 的时钟贴图显示尺寸偏小。
 -- 仅对确认未适配新版时钟贴图尺寸的 HUD 放大，其他主题（含原版、奶茶猫）不动。
 local needsClockFix = {
-    ["workshop-3456159081"] = true, -- Archive HUD
-    ["workshop-3381333362"] = true, -- Merrymaker HUD
-    ["workshop-3548608555"] = true, -- Mystery HUD
-    ["workshop-3173870597"] = true, -- Redux HUD
-    ["workshop-2571443104"] = true, -- Celestial HUD
+    ["workshop-2238885511"] = true, -- The Verdant HUD
     ["workshop-2284894693"] = true, -- Pig Ruins HUD
     ["workshop-2329943377"] = true, -- The Lunar HUD
+    ["workshop-2571443104"] = true, -- Celestial HUD
+    ["workshop-3173870597"] = true, -- Redux HUD
+    ["workshop-3381333362"] = true, -- Merrymaker HUD
+    ["workshop-3456159081"] = true, -- Archive HUD
+    ["workshop-3548608555"] = true, -- Mystery HUD
 }
 
 local function applyClockTextureScale(clock)
