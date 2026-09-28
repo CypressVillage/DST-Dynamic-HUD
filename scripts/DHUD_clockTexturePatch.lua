@@ -1,27 +1,22 @@
 -- Klei 更新后，部分旧 HUD 的时钟贴图显示尺寸偏小。
--- 对未适配的 HUD 将地表时钟的 rim / hand 图片从原版 0.5 缩放设为 1。
-local excludedHUDs = {
-    ["origin"] = true, -- 原版
-    ["workshop-2226345952"] = true, -- Nautical HUD
-    ["workshop-1992293314"] = true, -- Nightmare / Shadow HUD
-    ["workshop-2954087809"] = true, -- Soul Infused HUD
-    ["workshop-1824509831"] = true, -- The Battle Arena / Forge HUD
-    ["workshop-1583765151"] = true, -- Victorian / Gorge HUD
-    ["workshop-2250176974"] = true, -- Roseate HUD
-    ["workshop-3649427234"] = true, -- Minecraft HUD
-}
-
-local handExcludedHUDs = {
-    ["workshop-3173870597"] = true, -- Redux HUD：只放大时钟边框
+-- 仅对确认未适配新版时钟贴图尺寸的 HUD 放大，其他主题（含原版、奶茶猫）不动。
+local needsClockFix = {
+    ["workshop-3456159081"] = true, -- Archive HUD
+    ["workshop-3381333362"] = true, -- Merrymaker HUD
+    ["workshop-3548608555"] = true, -- Mystery HUD
+    ["workshop-3173870597"] = true, -- Redux HUD
+    ["workshop-2571443104"] = true, -- Celestial HUD
+    ["workshop-2284894693"] = true, -- Pig Ruins HUD
+    ["workshop-2329943377"] = true, -- The Lunar HUD
 }
 
 local function applyClockTextureScale(clock)
     if not clock then
         return
     end
-    local rimScale = excludedHUDs[CURRENT_HUD_MOD] and 0.5 or 1
-    local handScale = (excludedHUDs[CURRENT_HUD_MOD]
-        or handExcludedHUDs[CURRENT_HUD_MOD]) and 0.5 or 1
+    local rimScale = needsClockFix[CURRENT_HUD_MOD] and 1 or 0.5
+    local handScale = (needsClockFix[CURRENT_HUD_MOD]
+        and CURRENT_HUD_MOD ~= "workshop-3173870597") and 1 or 0.5
     -- Cave clock uses animated rim and a scaled hand container; this patch only
     -- targets the two static Image widgets used by the surface clock.
     if clock._rim and clock._rim.SetTexture then
