@@ -4,6 +4,8 @@ local function getOriginAtlasPath(atlas)
         return "images/avatars.xml"
     elseif atlas:find("images/crafting_menu/") then
         return "images/crafting_menu.xml"
+    elseif atlas:find("images/crafting_menu_icons/") then
+        return "images/crafting_menu_icons.xml"
     elseif atlas:find("images/frontend/") then
         return "images/frontend.xml"
     elseif atlas:find("images/hud/") then
@@ -24,6 +26,7 @@ end
 local originAtlases = {
     "images/avatars.xml",
     "images/crafting_menu.xml",
+    "images/crafting_menu_icons.xml",
     "images/frontend.xml",
     "images/hud.xml",
     "images/hud2.xml",
@@ -113,6 +116,31 @@ local function ProcessAtlasPath(atlas, tex, replacement)
         end
     end
 
+    -- 原 HUD 的 PostConstruct 不再运行，由统一入口接管第三方界面贴图。
+    local special
+    if tex == "status_bgs.tex" then
+        special = {
+            "images/combinedstatus/status_bgs2.xml",
+            "images/status_bgs2.xml",
+            "images/status_bgs.xml",
+        }
+    elseif tex == "sisturn_slot_petals.tex" then
+        -- Redux 的文件名为单数，但 atlas 内元素使用原版的复数名称。
+        special = { "images/hud/sisturn_slot_petal.xml" }
+    elseif (tex == "tools_back.tex" or tex == "tools_back_ship.tex"
+        or tex == "equip_back.tex" or tex == "equip_back_long.tex")
+        and atlas:find("basic_back", 1, true) then
+        special = { "images/fastequipment/basic_back2.xml" }
+    end
+    if special then
+        for _, path in ipairs(special) do
+            local resolved = atlasContains("../mods/"..replacement.."/"..path, tex)
+            if resolved then
+                return resolved
+            end
+        end
+    end
+
     -- 从合并 atlas 切回单贴图 HUD；也兼容单贴图文件名不同的情况。
     local folder = origin:match("^images/([%w_]+)%.xml$")
     local name = tex:match("^([%w_%-]+)%.tex$")
@@ -127,7 +155,7 @@ local function ProcessAtlasPath(atlas, tex, replacement)
 end
 
 local Image = require("widgets/image")
-local _SetTexture = Image.SetTexture -- 这个必须在其他mod执行后执行？
+local _SetTexture = Image.SetTexture
 Image.SetTexture = function(self, atlas, tex, ...)
     if type(atlas) ~= "string" or type(tex) ~= "string" then
         return _SetTexture(self, atlas, tex, ...)
@@ -135,6 +163,9 @@ Image.SetTexture = function(self, atlas, tex, ...)
     if atlas:find("modicon.xml") then
         return _SetTexture(self, atlas, tex, ...)
     end
+    -- 保存调用者请求的资源；切换时不能把上一个主题的路径当作源资源。
+    self._dhud_source_atlas = atlas
+    self._dhud_source_texture = tex
     local newatlas, isOrigin = ProcessAtlasPath(atlas, tex, CURRENT_HUD_MOD)
     if isOrigin then
         -- 原版 Image:SetTexture 会再次 resolvefilepath，重新命中 HUD 的
@@ -155,7 +186,8 @@ local function reloadAllTexture(widget)
     
     if widget.atlas and widget.texture then
         if widget.SetTexture then
-            widget:SetTexture(widget.atlas, widget.texture)
+            widget:SetTexture(widget._dhud_source_atlas or widget.atlas,
+                widget._dhud_source_texture or widget.texture)
         end
     end
 
@@ -188,7 +220,7 @@ local function processBuildOverride(buildname)
             end
         end
     end
-    return originbuildname
+    return ORIGIN_BUILD_OVERRIDE[originbuildname] or originbuildname
 end
 
 -- Bank 决定动画变换，必须与原版 build 配套，不能沿用 HUD 的同名 bank。
@@ -257,6 +289,37 @@ local function updateAllBuilds(widget)
     end
 end
 
+-- 原主题的头像 tint 原先在 PostConstruct 中永久生效，现在随主题切换恢复。
+local function updateStatusTint(status)
+    local themed = BUILD_OVERRIDE[CURRENT_HUD_MOD] ~= nil
+        and CURRENT_HUD_MOD ~= "workshop-2284894693"
+        and CURRENT_HUD_MOD ~= "workshop-2329943377"
+        and CURRENT_HUD_MOD ~= "workshop-2238885511"
+    for _, child in pairs(status:GetChildren()) do
+        local frame = child.headframe
+        if frame and frame.tint then
+            if not frame._dhud_original_tint then
+                frame._dhud_original_tint = { GLOBAL.unpack(frame.tint) }
+            end
+            if (CURRENT_HUD_MOD == "workshop-2571443104"
+                or CURRENT_HUD_MOD == "workshop-2329943377")
+                and (child == status.tempbadge or child == status.worldtempbadge) then
+                frame:SetTint(1, 1, 1, 1)
+            elseif themed then
+                frame:SetTint(0.75, 0.75, 0.75, 1)
+            else
+                frame:SetTint(GLOBAL.unpack(frame._dhud_original_tint))
+            end
+        end
+    end
+end
+
+AddClassPostConstruct("widgets/statusdisplays", function(self)
+    self.inst:DoTaskInTime(0, function()
+        updateStatusTint(self)
+    end)
+end)
+
 local function storePositions()
     local controls = GLOBAL.ThePlayer.HUD.controls
     pt_topright_root = controls.topright_root:GetPosition()
@@ -318,6 +381,7 @@ function applyHUD(mod_id)
         reloadAllTexture(controls.topright_root)       -- 右上角
         -- 状态栏有很多子组件；只更新边框会留下旧 HUD 的 anim / icon 等 build。
         updateAllBuilds(controls.status)
+        updateStatusTint(controls.status)
         
         updateBuild(controls.clock._rim)
         updateBuild(controls.clock._anim)
