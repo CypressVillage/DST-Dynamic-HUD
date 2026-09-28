@@ -21,7 +21,7 @@ SUPPORTED_HUD_MODS = {
 }
 
 -- 原版 HUD 不需要单独启用的模组，始终作为可切换目标。
-ENABLED_HUD_MODS = { "origin" }
+HUD_ENABLED = { origin = true }
 BUILD_OVERRIDE = {}
 
 -- 原版动画也使用独立的 build 名，避免与已启用 HUD 的同名 build 冲突。
@@ -31,12 +31,8 @@ modimport('buildoverride/origin_banks.lua')
 
 for _, mod_id in ipairs(SUPPORTED_HUD_MODS) do
     if GLOBAL.KnownModIndex:IsModEnabled(mod_id) then
-        table.insert(ENABLED_HUD_MODS, mod_id)
+        HUD_ENABLED[mod_id] = true
         modimport('assets/' .. mod_id .. '.lua')
         modimport('buildoverride/' .. mod_id .. '.lua')
     end
-end
-
-if #ENABLED_HUD_MODS == 1 then
-    print("[HUD]: No supported HUD mods are enabled; only the origin HUD is available.")
 end
