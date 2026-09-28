@@ -35,11 +35,17 @@ ORIGIN_BANK_OVERRIDE = {
     ["dhud_origin_status_clear_bg"] = {
         ["status_clear_bg"] = "dhud_origin_status_clear_bg_status_clear_bg",
     },
+    ["dhud_origin_status_health"] = {
+        ["status_health"] = "dhud_origin_status_health_status_health",
+    },
     ["dhud_origin_status_meter"] = {
         ["status_meter"] = "dhud_origin_status_meter_status_meter",
     },
     ["dhud_origin_status_oldage"] = {
         ["status_oldage"] = "dhud_origin_status_oldage_status_oldage",
+    },
+    ["dhud_origin_status_sanity"] = {
+        ["status_sanity"] = "dhud_origin_status_sanity_status_sanity",
     },
     ["dhud_origin_status_wathgrithr"] = {
         ["status_wathgrithr"] = "dhud_origin_status_wathgrithr_status_wathgrithr",

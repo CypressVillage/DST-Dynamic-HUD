@@ -1,6 +1,7 @@
 modimport('scripts/DHUD_preloadAssets.lua')
 modimport('scripts/DHUD_interceptModMain.lua')
 modimport('scripts/DHUD_hookAssets.lua')
+modimport('scripts/DHUD_clockTexturePatch.lua')
 modimport('scripts/DHUD_hudAnimation.lua')
 modimport('scripts/DHUD_applyHUD.lua')
 modimport('scripts/DHUD_updateEvent.lua')

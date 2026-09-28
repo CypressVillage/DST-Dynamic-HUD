@@ -1,6 +1,11 @@
 Assets = {}
 
 SUPPORTED_HUD_MODS = {
+    "workshop-3649427234", -- Minecraft HUD
+    -- "workshop-3788570861", -- Picnic HUD
+    -- "workshop-3802486364", -- Little Bear HUD
+    -- "workshop-3805109176", -- Xiaoke HUD
+    "workshop-3806868550", -- Milk Tea Cat HUD
     "workshop-3456159081", -- Archive HUD
     -- "workshop-3285344272", -- Celestial HUD Fixed 原作者删除/隐藏
     "workshop-3381333362", -- Merrymaker HUD

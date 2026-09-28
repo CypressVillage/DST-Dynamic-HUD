@@ -38,6 +38,7 @@ local function refreshBuild(widget)
                 animState:SetBuild(newbuild)
             end
         end
+        HUD_ASSET_RESOLVER.RefreshSymbols(animState)
     end
 end
 
@@ -86,6 +87,7 @@ end
 
 local function refreshClockBuilds(controls)
     local clock = controls.clock
+    HUD_CLOCK_TEXTURE_PATCH.Apply(clock)
     refreshBuild(clock._rim)
     refreshBuild(clock._anim)
     refreshBuild(clock._moonanim)
@@ -94,6 +96,7 @@ local function refreshClockBuilds(controls)
         clock._anim:GetAnimState():PlayAnimation("idle_"..clock._phase, true)
     end
     if controls.seasonclock then
+        HUD_CLOCK_TEXTURE_PATCH.Apply(controls.seasonclock)
         refreshBuild(controls.seasonclock._rim)
         refreshBuild(controls.seasonclock._anim)
     end
@@ -158,24 +161,38 @@ function applyHUD(mod_id)
         print("[HUD]: HUD mod not enabled: ", mod_id)
         return
     end
+    local player = GLOBAL.ThePlayer
+    if not player or not player.HUD then
+        return
+    end
+    local controls = player.HUD.controls
+    if controls._dhud_switching then
+        controls._dhud_pending_hud = mod_id
+        return
+    end
     if CURRENT_HUD_MOD == mod_id then
         return
     end
-    local controls = GLOBAL.ThePlayer.HUD.controls
 
-    HUD_ANIMATION.StorePositions(controls)
-    if GetModConfigData("ENABLE_FLUENT_ANIM") then
-        HUD_ANIMATION.Hide(controls)
-    end
-
-    GLOBAL.ThePlayer:DoTaskInTime(0.3, function()
+    if not GetModConfigData("ENABLE_FLUENT_ANIM") then
         CURRENT_HUD_MOD = mod_id
         refreshHUD(controls)
-    end)
-
-    if GetModConfigData("ENABLE_FLUENT_ANIM") then
-        GLOBAL.ThePlayer:DoTaskInTime(0.5, function()
-            HUD_ANIMATION.Show(controls)
-        end)
+        return
     end
+
+    controls._dhud_switching = true
+    HUD_ANIMATION.StorePositions(controls)
+    -- MoveTo 使用 wall time；以动画完成回调串联，避免暂停时游戏时间任务停住。
+    HUD_ANIMATION.Hide(controls, function()
+        CURRENT_HUD_MOD = mod_id
+        refreshHUD(controls)
+        HUD_ANIMATION.Show(controls, function()
+            controls._dhud_switching = nil
+            local pending = controls._dhud_pending_hud
+            controls._dhud_pending_hud = nil
+            if pending then
+                applyHUD(pending)
+            end
+        end)
+    end)
 end

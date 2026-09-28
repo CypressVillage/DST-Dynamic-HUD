@@ -206,6 +206,19 @@ local actualBanks = GLOBAL.setmetatable({}, { __mode = "k" })
 local originalSetBank = GLOBAL.AnimState.SetBank
 local originalSetBuild = GLOBAL.AnimState.SetBuild
 local originalOverrideSymbol = GLOBAL.AnimState.OverrideSymbol
+local originalClearOverrideSymbol = GLOBAL.AnimState.ClearOverrideSymbol
+local logicalSymbols = GLOBAL.setmetatable({}, { __mode = "k" })
+
+-- 记录调用方请求的 build，而不是当前主题解析出的 build；切换时才能重新解析。
+HUD_ASSET_RESOLVER.RefreshSymbols = function(animState)
+    local symbols = logicalSymbols[animState]
+    if symbols then
+        for symbol, source in pairs(symbols) do
+            originalOverrideSymbol(animState, symbol,
+                resolveCurrentHUDBuildName(source.build), source.symbol)
+        end
+    end
+end
 
 local function resolveBankForBuild(bank, build)
     local mapping = ORIGIN_BANK_OVERRIDE[build]
@@ -236,10 +249,38 @@ end
 
 GLOBAL.AnimState.OverrideSymbol = function(self, symbol, buildname, ...)
     if buildname then
+        local sourceSymbol = ...
+        local symbols = logicalSymbols[self]
+        if not symbols then
+            symbols = {}
+            logicalSymbols[self] = symbols
+        end
+        -- 第一个附加参数是资源中的 symbol 名称。
+        symbols[symbol] = { build = buildname, symbol = sourceSymbol }
         local resolvedBuild = resolveCurrentHUDBuildName(buildname)
         if resolvedBuild ~= buildname then
             return originalOverrideSymbol(self, symbol, resolvedBuild, ...)
         end
     end
     return originalOverrideSymbol(self, symbol, buildname, ...)
+end
+
+GLOBAL.AnimState.ClearOverrideSymbol = function(self, symbol, ...)
+    local symbols = logicalSymbols[self]
+    if symbols then
+        symbols[symbol] = nil
+    end
+    return originalClearOverrideSymbol(self, symbol, ...)
+end
+
+-- 皮肤覆盖优先于普通图标；切换主题时不应重新应用旧的普通覆盖。
+if GLOBAL.AnimState.OverrideSkinSymbol then
+    local originalOverrideSkinSymbol = GLOBAL.AnimState.OverrideSkinSymbol
+    GLOBAL.AnimState.OverrideSkinSymbol = function(self, symbol, ...)
+        local symbols = logicalSymbols[self]
+        if symbols then
+            symbols[symbol] = nil
+        end
+        return originalOverrideSkinSymbol(self, symbol, ...)
+    end
 end

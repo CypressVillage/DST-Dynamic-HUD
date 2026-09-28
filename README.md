@@ -22,6 +22,11 @@ github: [CypressVillage/DST-Dynamic-HUD](https://github.com/CypressVillage/DST-D
 
 | HUD 名称             | workshop 地址                                                                                                                 | 兼容情况 |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------- |
+| Minecraft HUD        | [Steam 创意工坊::Minecraft HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3649427234)                             | ✅       |
+| Picnic HUD           | [Steam 创意工坊::Picnic HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3788570861)                                | ✅       |
+| Little Bear HUD      | [Steam 创意工坊::Little Bear HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3802486364)                           | ✅       |
+| Xiaoke HUD           | [Steam 创意工坊::Xiaoke HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3805109176)                                | ✅       |
+| Milk Tea Cat HUD     | [Steam 创意工坊::Milk Tea Cat HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3806868550)                          | ✅       |
 | Archive HUD          | [Steam 创意工坊::[DST] Archive HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3456159081&searchtext=HUD)            | ✅       |
 | Celestial HUD Fixed  | [Steam 创意工坊::[DST]Celestial HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3285344272&searchtext=HUD)           | ✅       |
 | Merrymaker HUD       | [Steam 创意工坊::[DST] Merrymaker HUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3381333362&searchtext=HUD)         | ✅       |

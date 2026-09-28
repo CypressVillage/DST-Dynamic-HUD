@@ -9,6 +9,11 @@ description = [[
 
 HUD兼容列表，*号表示由于原 HUD 过旧，兼容性差：
 - Origin HUD（原版HUD）
+- Minecraft HUD（workshop-3649427234）
+- Picnic HUD（workshop-3788570861）
+- Little Bear HUD（workshop-3802486364）
+- Xiaoke HUD（workshop-3805109176）
+- Milk Tea Cat HUD（workshop-3806868550）
 - Archive HUD（workshop-3456159081）
 - Celestial HUD [Fixed]（workshop-3285344272）
 - Merrymaker HUD（workshop-3381333362）
@@ -60,6 +65,11 @@ local priority_table = {
 }
 local hud_table = {
     {description = "Origin HUD", data = "origin"},
+    {description = "Minecraft HUD", data = "workshop-3649427234"},
+    {description = "Picnic HUD", data = "workshop-3788570861"},
+    {description = "Little Bear HUD", data = "workshop-3802486364"},
+    {description = "Xiaoke HUD", data = "workshop-3805109176"},
+    {description = "Milk Tea Cat HUD", data = "workshop-3806868550"},
     {description = "Archive HUD", data = "workshop-3456159081"},
     {description = "Celestial HUD [Fixed]", data = "workshop-3285344272"},
     {description = "Merrymaker HUD", data = "workshop-3381333362"},

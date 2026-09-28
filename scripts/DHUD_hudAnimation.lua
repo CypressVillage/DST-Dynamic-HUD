@@ -9,32 +9,55 @@ local animatedRoots = {
     { name = "left_root", x = -800, y = 0 },
 }
 
-local originalPositions
-
 function HUDAnimation.StorePositions(controls)
-    if originalPositions then
-        return
-    end
-
-    originalPositions = {}
-    for _, root in ipairs(animatedRoots) do
-        originalPositions[root.name] = controls[root.name]:GetPosition()
-    end
-end
-
-function HUDAnimation.Hide(controls)
-    for _, root in ipairs(animatedRoots) do
-        local position = originalPositions[root.name]
-        controls[root.name]:MoveTo(position,
-            GLOBAL.Vector3(root.x, root.y, position.z), 0.3)
-    end
-end
-
-function HUDAnimation.Show(controls)
+    local originalPositions = {}
     for _, root in ipairs(animatedRoots) do
         local widget = controls[root.name]
-        widget:MoveTo(widget:GetPosition(), originalPositions[root.name], 0.5)
+        if widget then
+            originalPositions[root.name] = widget:GetPosition()
+        end
     end
+    controls._dhud_original_positions = originalPositions
+end
+
+local function moveRoots(controls, hiding, onComplete)
+    local positions = controls._dhud_original_positions
+    local moves = {}
+    for _, root in ipairs(animatedRoots) do
+        local widget = controls[root.name]
+        local position = positions and positions[root.name]
+        if widget and position then
+            moves[#moves + 1] = {
+                widget = widget,
+                target = hiding and GLOBAL.Vector3(
+                    position.x + root.x, position.y + root.y, position.z) or position,
+            }
+        end
+    end
+
+    local remaining = #moves
+    if remaining == 0 then
+        onComplete()
+        return
+    end
+    for _, move in ipairs(moves) do
+        local widget = move.widget
+        widget:CancelMoveTo()
+        widget:MoveTo(widget:GetPosition(), move.target, hiding and 0.3 or 0.5, function()
+            remaining = remaining - 1
+            if remaining == 0 then
+                onComplete()
+            end
+        end)
+    end
+end
+
+function HUDAnimation.Hide(controls, onComplete)
+    moveRoots(controls, true, onComplete)
+end
+
+function HUDAnimation.Show(controls, onComplete)
+    moveRoots(controls, false, onComplete)
 end
 
 HUD_ANIMATION = HUDAnimation
